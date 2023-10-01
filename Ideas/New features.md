@@ -12,4 +12,4 @@
 	- Review and approve requests on the go from the extend app
 	- Whitelist the people who are allowed to request for cards from you
 1. Allocate Budgets and delegate spending power
-	- Create budget for different family members friends, projects, clients or expense categories
+	- Create budget for different family members friends, projects, clients or expense categories 

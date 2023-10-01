@@ -3,6 +3,17 @@ import rave from '../config/flutterwave_init';
 import model from '../models';
 const httpStatus = require("http-status");
 
+
+/**
+ * Create card with flutterwave
+ *
+ * @param {Object} data
+ * @param {String} cardType
+ * @param {String} redirect_url
+ * @param {Boolean} gifted
+ * @param {String} gifterId
+ * @returns {Promise<Card>}
+ */
 const createCard = async (data, cardType, userId, gifted, gifterId) => {
     switch(cardType){
     //Basic Card
