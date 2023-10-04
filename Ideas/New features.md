@@ -9,7 +9,6 @@
 4. Manage Family card request (first need to add the feature of username)
 	- Simplify process by allowing Family members and friends to request cards in app
 	- Include notes and attachments for approver to review
-	- Review and approve requests on the go from the extend app
+	- Review and approve requests on the go from the app
 	- Whitelist the people who are allowed to request for cards from you
 1. Allocate Budgets and delegate spending power
-	- Create budget for different family members friends, projects, clients or expense categories 

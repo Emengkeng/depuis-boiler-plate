@@ -2,7 +2,8 @@ import { use } from 'chai';
 import rave from '../config/flutterwave_init';
 import model from '../models';
 const httpStatus = require("http-status");
-
+import fee from '../config/cardfee';
+import { findUserByEmail, findUserById, getUserBalance, hasEnoughBalance } from '../services/user.service';
 
 /**
  * Create card with flutterwave
@@ -134,6 +135,15 @@ const createCard = async (data, cardType, userId, gifted, gifterId) => {
                 }); 
             }
 
+            //Have to scrutinice this again 
+            // Check if user has enough balance
+            const uaccount = await hasEnoughBalance(userId, fee.UNLIMITEDC);
+            if(!uaccount){
+                return res.status(403).json({
+                    message: 'Not Enough Balance to Create Card',
+                });
+            }
+
             //Checks if it is gift card 
             if(gifted == true) {
                 const ucardTypeUpdate = await model.CardType.create({
@@ -215,6 +225,10 @@ const createCard = async (data, cardType, userId, gifted, gifterId) => {
     //Loadable multiple times. 
     //- No freezing or withdrawals allowed. 
     //- Creation fee of $12, $3 monthly fee.
+    //- Set Limits, expiration dates,
+    //- Simplify process by allowing Family members 
+    // and friends to request cards in app
+    // Include notes and attachments for approver to review
         case "FAMILYC":
 
             // Check if user is already subscribed to that card
@@ -230,6 +244,15 @@ const createCard = async (data, cardType, userId, gifted, gifterId) => {
                     success: false,
                     message: "ALready Subscribed To This Card",
                 }); 
+            }
+
+            //Have to scrutinice this again 
+            // Check if user has enough balance
+            const faccount = await hasEnoughBalance(userId, fee.FAMILYC);
+            if(!faccount){
+                return res.status(403).json({
+                    message: 'Not Enough Balance to Create Card',
+                });
             }
 
             //Checks if it is gift card 
@@ -323,6 +346,15 @@ const createCard = async (data, cardType, userId, gifted, gifterId) => {
                     success: false,
                     message: "ALready Subscribed To This Card",
                 }); 
+            }
+
+            //Have to scrutinice this again 
+            // Check if user has enough balance
+            const taccount = await hasEnoughBalance(userId, fee.TRAVELC);
+            if(!taccount){
+                return res.status(403).json({
+                    message: 'Not Enough Balance to Create Card',
+                });
             }
 
             //Checks if it is gift card 
@@ -422,6 +454,15 @@ const createCard = async (data, cardType, userId, gifted, gifterId) => {
                 }); 
             }
 
+            //Have to scrutinice this again 
+            // Check if user has enough balance
+            const baccount = await hasEnoughBalance(userId, fee.BUSINESSC);
+            if(!baccount){
+                return res.status(403).json({
+                    message: 'Not Enough Balance to Create Card',
+                });
+            }
+
             //Checks if it is gift card 
             if(gifted == true ){
                 const bcardTypeUpdate = await model.CardType.create({
@@ -517,6 +558,15 @@ const createCard = async (data, cardType, userId, gifted, gifterId) => {
                 });
             }
 
+            //Have to scrutinice this again 
+            // Check if user has enough balance
+            const saccount = await hasEnoughBalance(userId, fee.STUDENTC);
+            if(!saccount){
+                return res.status(403).json({
+                    message: 'Not Enough Balance to Create Card',
+                });
+            }
+
             //Checks if it is gift card 
             if(gifted == true ){
                 const scardTypeUpdate = await model.CardType.create({
@@ -606,6 +656,15 @@ const createCard = async (data, cardType, userId, gifted, gifterId) => {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
+                });
+            }
+
+            //Have to scrutinice this again 
+            // Check if user has enough balance
+            const caccount = await hasEnoughBalance(userId, fee.CHARITYC);
+            if(!caccount){
+                return res.status(403).json({
+                    message: 'Not Enough Balance to Create Card',
                 });
             }
 
@@ -703,6 +762,15 @@ const createCard = async (data, cardType, userId, gifted, gifterId) => {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
+                });
+            }
+
+            //Have to scrutinice this again 
+            // Check if user has enough balance
+            const eaccount = await hasEnoughBalance(userId, fee.EXCLUSIVEC);
+            if(!eaccount){
+                return res.status(403).json({
+                    message: 'Not Enough Balance to Create Card',
                 });
             }
 
@@ -808,6 +876,15 @@ const createCard = async (data, cardType, userId, gifted, gifterId) => {
                 }); 
             }
 
+            //Have to scrutinice this again 
+            // Check if user has enough balance
+            const raccount = await hasEnoughBalance(userId, fee.REWARDC);
+            if(!raccount){
+                return res.status(403).json({
+                    message: 'Not Enough Balance to Create Card',
+                });
+            }
+
             //Checks if it is gift card 
             if(gifted == true ){
                 const rcardTypeUpdate = await model.CardType.create({
@@ -900,6 +977,15 @@ const createCard = async (data, cardType, userId, gifted, gifterId) => {
                     success: false,
                     message: "ALready Subscribed To This Card",
                 }); 
+            }
+
+            //Have to scrutinice this again 
+            // Check if user has enough balance
+            const bbaccount = await hasEnoughBalance(userId, fee.BUDGETC);
+            if(!bbaccount){
+                return res.status(403).json({
+                    message: 'Not Enough Balance to Create Card',
+                });
             }
 
             //Checks if it is gift card 

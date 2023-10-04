@@ -64,7 +64,7 @@ const findUserById = async(id) => {
 
 const getUserBalance = async(userId) => {
     const accountDetails = await model.Accounts.findOne({
-        where: { UserId: userId },
+        where: { userId: userId },
     });
 
     return accountDetails;
@@ -99,6 +99,28 @@ const findWalletByWalletC = async(wallet_code) => {
     return user
 }
 
+const hasEnoughBalance = async(userId, fee) => {
+    const accountDetails = await getUserBalance(userId);
+    const { balance } = accountDetails.dataValues;
+    console.log(balance);
+
+    // Logic check before creating card
+    const amt = parseFloat(balance);
+    console.log('amount', amt);
+    if (amt < fee) {
+        return false;
+    }
+}
+
+const checkCard = async(userId) => {
+    const checkCard = await model.CardType.findOne({
+        where: {
+            userId: userId,
+        },
+    });
+
+    return checkCard
+}
 
 module.exports = {
     createUser,
@@ -106,5 +128,7 @@ module.exports = {
     getProfile,
     findWalletByWalletC,
     findUserById,
-    getUserBalance
+    getUserBalance,
+    hasEnoughBalance,
+    checkCard,
 };
