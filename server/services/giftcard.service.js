@@ -5,6 +5,15 @@ const { checkCard, hasEnoughBalance } = require('./user.service')
 const { sendMail } = require('./')
 const httpStatus = require("http-status");
 
+/**
+ * Gift a Card 
+ * @param {String} cardType
+ * @param {String} userId
+ * @param {String} recieverName
+ * @param {String} gifterId
+ * @param {Date} date
+ * @returns {Promise<giftCard>}
+ */
 
 const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
     switch (cardType) {
@@ -22,13 +31,14 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
 
             acceptlink = uuid.v4();
 
-            const cardGiftUpdate = await model.GiftCard.creat({
+            const cardGiftUpdate = await model.GiftCard.create({
                 recipient: userId,
                 accepted: false,
                 expiresIn: date,
                 expired: false,
                 cardType: cardType,
                 acceptLink: acceptlink,
+                userId: gifterId,
             })
 
             const sendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
@@ -36,27 +46,271 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
             return sendEmail;
         
         case UNLIMITEDC:
+            // Check if user is already subscribed to that card
+            // and if so, refuse to create duplicate
+            const ucheckcard = await checkCard(userId);
+
+            if (checkcard.name == 'UNLIMITEDC') {
+                return res.status(httpStatus.BAD_REQUEST).json({
+                    success: false,
+                    message: "The User Is Already Subscribed TO This Card",
+                });
+            }
+
+            acceptlink = uuid.v4();
+
+            const ucardGiftUpdate = await model.GiftCard.creat({
+                recipient: userId,
+                accepted: false,
+                expiresIn: date,
+                expired: false,
+                cardType: cardType,
+                acceptLink: acceptlink,
+                userId: gifterId,
+            })
+
+            const usendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+
+            return usendEmail;
+        
         
         case FAMILYC:
+            // Check if user is already subscribed to that card
+            // and if so, refuse to create duplicate
+            const fcheckcard = await checkCard(userId);
+
+            if (checkcard.name == 'FAMILYC') {
+                return res.status(httpStatus.BAD_REQUEST).json({
+                    success: false,
+                    message: "The User Is Already Subscribed TO This Card",
+                });
+            }
+
+            acceptlink = uuid.v4();
+
+            const fcardGiftUpdate = await model.GiftCard.creat({
+                recipient: userId,
+                accepted: false,
+                expiresIn: date,
+                expired: false,
+                cardType: cardType,
+                acceptLink: acceptlink,
+                userId: gifterId,
+            })
+
+            const fsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+
+            return fsendEmail;
+        
 
         case TRAVELC:
+            // Check if user is already subscribed to that card
+            // and if so, refuse to create duplicate
+            const tcheckcard = await checkCard(userId);
+
+            if (checkcard.name == 'TRAVELC') {
+                return res.status(httpStatus.BAD_REQUEST).json({
+                    success: false,
+                    message: "The User Is Already Subscribed TO This Card",
+                });
+            }
+
+            acceptlink = uuid.v4();
+
+            const tcardGiftUpdate = await model.GiftCard.creat({
+                recipient: userId,
+                accepted: false,
+                expiresIn: date,
+                expired: false,
+                cardType: cardType,
+                acceptLink: acceptlink,
+                userId: gifterId,
+            })
+
+            const tsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+
+            return tsendEmail;
+        
 
         case BUSINESSC:
+            // Check if user is already subscribed to that card
+            // and if so, refuse to create duplicate
+            const bcheckcard = await checkCard(userId);
+
+            if (checkcard.name == 'BUSINESSC') {
+                return res.status(httpStatus.BAD_REQUEST).json({
+                    success: false,
+                    message: "The User Is Already Subscribed TO This Card",
+                });
+            }
+
+            acceptlink = uuid.v4();
+
+            const bcardGiftUpdate = await model.GiftCard.creat({
+                recipient: userId,
+                accepted: false,
+                expiresIn: date,
+                expired: false,
+                cardType: cardType,
+                acceptLink: acceptlink,
+                userId: gifterId,
+            })
+
+            const bsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+
+            return bsendEmail;
+        
 
         case STUDENTC:
+            // Check if user is already subscribed to that card
+            // and if so, refuse to create duplicate
+            const scheckcard = await checkCard(userId);
+
+            if (checkcard.name == 'STUDENTC') {
+                return res.status(httpStatus.BAD_REQUEST).json({
+                    success: false,
+                    message: "The User Is Already Subscribed TO This Card",
+                });
+            }
+
+            acceptlink = uuid.v4();
+
+            const scardGiftUpdate = await model.GiftCard.creat({
+                recipient: userId,
+                accepted: false,
+                expiresIn: date,
+                expired: false,
+                cardType: cardType,
+                acceptLink: acceptlink,
+                userId: gifterId,
+            })
+
+            const ssendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+
+            return ssendEmail;
+        
 
         case CHARITYC:
+            // Check if user is already subscribed to that card
+            // and if so, refuse to create duplicate
+            const ccheckcard = await checkCard(userId);
+
+            if (checkcard.name == 'CHARITYC') {
+                return res.status(httpStatus.BAD_REQUEST).json({
+                    success: false,
+                    message: "The User Is Already Subscribed TO This Card",
+                });
+            }
+
+            acceptlink = uuid.v4();
+
+            const ccardGiftUpdate = await model.GiftCard.creat({
+                recipient: userId,
+                accepted: false,
+                expiresIn: date,
+                expired: false,
+                cardType: cardType,
+                acceptLink: acceptlink,
+                userId: gifterId,
+            })
+
+            const csendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+
+            return csendEmail;
+        
 
         case EXCLUSIVEC:
+            // Check if user is already subscribed to that card
+            // and if so, refuse to create duplicate
+            const echeckcard = await checkCard(userId);
+
+            if (checkcard.name == 'EXCLUSIVEC') {
+                return res.status(httpStatus.BAD_REQUEST).json({
+                    success: false,
+                    message: "The User Is Already Subscribed TO This Card",
+                });
+            }
+
+            acceptlink = uuid.v4();
+
+            const ecardGiftUpdate = await model.GiftCard.creat({
+                recipient: userId,
+                accepted: false,
+                expiresIn: date,
+                expired: false,
+                cardType: cardType,
+                acceptLink: acceptlink,
+                userId: gifterId,
+            })
+
+            const esendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+
+            return esendEmail;
+        
 
         case REWARDC:
+            // Check if user is already subscribed to that card
+            // and if so, refuse to create duplicate
+            const rcheckcard = await checkCard(userId);
+
+            if (checkcard.name == 'REWARD') {
+                return res.status(httpStatus.BAD_REQUEST).json({
+                    success: false,
+                    message: "The User Is Already Subscribed TO This Card",
+                });
+            }
+
+            acceptlink = uuid.v4();
+
+            const rcardGiftUpdate = await model.GiftCard.creat({
+                recipient: userId,
+                accepted: false,
+                expiresIn: date,
+                expired: false,
+                cardType: cardType,
+                acceptLink: acceptlink,
+                userId: gifterId,
+            })
+
+            const rsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+
+            return rsendEmail;
+        
 
         case BUDGETC:
+            // Check if user is already subscribed to that card
+            // and if so, refuse to create duplicate
+            const bbcheckcard = await checkCard(userId);
+
+            if (checkcard.name == 'BUDGETC') {
+                return res.status(httpStatus.BAD_REQUEST).json({
+                    success: false,
+                    message: "The User Is Already Subscribed TO This Card",
+                });
+            }
+
+            acceptlink = uuid.v4();
+
+            const bbcardGiftUpdate = await model.GiftCard.creat({
+                recipient: userId,
+                accepted: false,
+                expiresIn: date,
+                expired: false,
+                cardType: cardType,
+                acceptLink: acceptlink,
+                userId: gifterId,
+            })
+
+            const bbsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+
+            return bbsendEmail;
+        
     
         default:
-            break;
+            return ("Not a valid card type");
     }
 };
+
 
 module.default = {
     giftCard,

@@ -23,7 +23,7 @@ router.post('/withdraw', [auth], cardController.withdraw_funds);
 
 router.post('/freeze_card', [auth], cardController.freeze_card);
 
-router.post('/gift_card', [auth, cardValidation.giftCard], cardController.gift_card)
+router.post('/gift_card', [auth], cardController.gift_card)
 
 
 

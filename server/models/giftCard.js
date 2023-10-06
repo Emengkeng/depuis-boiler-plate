@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const GiftCard = sequelize.define('GiftCard', {
         recipient: {
-            type: DataTypes.STRTING,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         accepted: {
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: false,
         },
         cardType: {
-            type: DataTypes.STRTING,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         acceptLink: {

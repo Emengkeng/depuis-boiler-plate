@@ -458,8 +458,9 @@ const gift_card = catchAsync(async (req, res) => {
             });
         }
         
+        fullName = reciever.first_name + reciever.last_name;
         //Gift Card
-        const response = await giftCard(data, cardType, reciever.id, reciever.first_name, sender.id, req.body.date);
+        const response = await giftCard(cardType, reciever.id, fullName, sender.id, req.body.date);
 
         //Update user Balance
         const newBalance = amt - parseFloat(amount);
@@ -496,115 +497,104 @@ const accept_gift_card = catchAsync(async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
     }
-    try {
-        const { 
-            amount, 
-            billing_name, 
-            billing_address, 
-            billing_city, 
-            billing_state, 
-            billing_postal_code,
-            billing_country,
-            first_name,
-            last_name,
-            date_of_birth,
-            email,
-            phone,
-            title,
-            gender,
-            cardtype,
-            wallet_email,
-        } = req.body;
 
-        const { id: userId } = req.user;
-
-        const data = /* JSON.stringify */(
-            {
-                "currency": "USD",
-                "amount": amount,
-                "debit_currency": "USD",
-                "billing_name": billing_name, //"Example User."
-                "billing_address": billing_address, //"333, Fremont Street"
-                "billing_city": billing_city, //"San Francisco"
-                "billing_state": billing_state, //"CA"
-                "billing_postal_code": billing_postal_code, //"94105"
-                "billing_country": billing_country, //"US"
-                "first_name": first_name,
-                "last_name": last_name,
-                "date_of_birth": date_of_birth, //"1996/12/30"
-                "email": email, //"userg@example.com"
-                "phone": phone, //"07030000000"
-                "title": title, //"MR"
-                "gender": gender, //"M"
-                "callback_url": process.env.CALLBACKURL,//"https://webhook.site/b67965fa-e57c-4dda-84ce-0f8d6739b8a5"
-            }
-        )
-
-        // Find the sender by id
-        const sender = await findUserById(userId)
-        if(!sender){
-            console.log('No User Found')
-            return res.json({
-                message: 'No User Found',
-            })
+    const activationLink = req.params.link;
+    const check = await model.GiftCard.findOne({
+        where:{
+            acceptLink: activationLink,
         }
+    });
 
-        // Find Reciever By Email
-        const reciever = await findUserByEmail(wallet_email)
-        if(!reciever){
-            console.log('The Reciever is not Found')
-            return res.json({
-                message: 'The Reciever is not Found',
-            })
-        }
-
-        // Get User balance 
-        const accountDetails = await getUserBalance(userId);
-        const { balance } = accountDetails.dataValues;
-        console.log(balance);
-
-        // Logic check before creating card
-        const amt = parseFloat(balance);
-        console.log('amount', amt);
-        if (amt < amount) {
-            return res.status(403).json({
-                message: 'Not Enough Balance to Gift Card',
-            });
-        }
-
-        //Update user Balance
-        const newBalance = amt - parseFloat(amount);
-        const update = await model.Accounts.update(
-            {
-                balance: newBalance,
-            },
-            {
-                where: {
-                    userId,
-                },
-            }
-        );
-        console.log('update', update);
-
-        gifted = true
-        
-        //Gift Card
-        const response = await createCard(data, cardtype, reciever.id, gifted, sender.id);
-        return res.status(httpStatus.CREATED).json({
-            success: true,
-            message: "Card Gifted successfully!",
-            data: {
-                ...response
-            },
-        });
-
-    } catch (error) {
-        // handle error here
+    if (!check) {
         return res.status(httpStatus.BAD_REQUEST).json({
             success: false,
-            error: error,
+            message: "Incorrect Card Acceptance Code",
         })
     }
+
+    if (req.user.id != check.recipient){
+        return res.status(httpStatus.BAD_REQUEST).json({
+            success: false,
+            message: "You are Not Authorize to Claim This Card",
+        })
+    }
+
+    if (check.accepted == true){
+        return res.status(httpStatus.BAD_REQUEST).json({
+            success: false,
+            message: "Card Already Claimed",
+        })
+    }
+
+    const { 
+        amount, 
+        billing_name, 
+        billing_address, 
+        billing_city, 
+        billing_state, 
+        billing_postal_code,
+        billing_country,
+        first_name,
+        last_name,
+        date_of_birth,
+        email,
+        phone,
+        title,
+        gender,
+        cardtype,
+        wallet_email,
+    } = req.body;
+
+    const { id: userId } = req.user;
+
+    const data = /* JSON.stringify */(
+        {
+            "currency": "USD",
+            "amount": amount,
+            "debit_currency": "USD",
+            "billing_name": billing_name, //"Example User."
+            "billing_address": billing_address, //"333, Fremont Street"
+            "billing_city": billing_city, //"San Francisco"
+            "billing_state": billing_state, //"CA"
+            "billing_postal_code": billing_postal_code, //"94105"
+            "billing_country": billing_country, //"US"
+            "first_name": first_name,
+            "last_name": last_name,
+            "date_of_birth": date_of_birth, //"1996/12/30"
+            "email": email, //"userg@example.com"
+            "phone": phone, //"07030000000"
+            "title": title, //"MR"
+            "gender": gender, //"M"
+            "callback_url": process.env.CALLBACKURL,//"https://webhook.site/b67965fa-e57c-4dda-84ce-0f8d6739b8a5"
+        }
+    )
+
+    // Find the user by id
+    const user = await findUserById(userId)
+    if(!user){
+        console.log('No User Found')
+        return res.json({
+            message: 'No User Found',
+        })
+    }
+
+    
+    //Gift Card
+    const response = await createCard(data, cardtype, userId);
+
+    // Update GiftCard table to accepted
+    await model.GiftCard.update({accepted:true, expiresIn: null, expired: true, },{
+        where: {
+            acceptLink: activationLink,
+        }
+    });
+    return res.status(httpStatus.CREATED).json({
+        success: true,
+        message: "Card Gifted successfully!",
+        data: {
+            ...response
+        },
+    });
 })
 
 module.exports = {

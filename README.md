@@ -17,7 +17,92 @@ This system allow users to fund their account, transfer funds and withdraw from 
 - Withdraw from card
 - 
 
-# API Documentation
+# API End Points
+## Users
+### Register
+```
+{BaseUrl}/api/v1/register
+```
+This endpoint does the followings:
+
+- Create a user
+- Create a wallet for the user
+
+
+### Login
+```
+{BaseUrl}/api/v1/login
+```
+This endpoint does the followings
+- Check if the user details is valid
+- Generate a JWT token if the user details are valid
+
+### Get Profile
+```
+{BaseUrl}/api/v1/auth/profile
+```
+- This endpoint return the profile of the authenticated user.
+
+### All Users
+```
+{BaseUrl}/api/v1/getallusers
+```
+- This endpoint return all registered users 
+
+## Wallet
+### Set Wallet Pin
+```
+{BaseUrl}/api/v1/wallet/set-pin
+```
+- Set wallet pin for the user because by default the wallet created during registration is null
+
+### Fund Wallet
+```
+{BaseUrl}/api/v1/wallet/fund
+```
+- Takes amount and generate payment link
+
+### Verify Wallet funding 
+```
+{BaseUrl}/api/v1/wallet/verify
+```
+- Takes Payment Link and verifies it
+
+### Transfer Money 
+```
+{BaseUrl}/api/v1/wallet/transfer
+```
+- Transfers money from one account to another 
+
+### Withdraw money
+```
+{BaseUrl}/api/v1/wallet/withdraw
+```
+- Checks account balance and Withdraw money from users account
+
+
+### Get Wallet Balance
+```
+{BaseUrl}/api/v1/wallet/balance
+```
+- Get users account balance
+
+### Banks
+```
+{BaseUrl}/api/v1/wallet/banks
+```
+- Get all available banks used by flutterwave
+
+## Transaction 
+### Get Wallet Transactions
+```
+{BaseUrl}/api/v1/transactions
+```
+- Get Users transactions 
+
+## Card
+
+
 
 
 # How to install

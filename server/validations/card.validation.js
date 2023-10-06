@@ -50,6 +50,9 @@ const createCard = [
         .isEmpty(),
 ]
 
+// Not Really needed Anymore
+// Left Just inCase we might need it
+// In the future
 const giftCard = [
     check("amount", "Amount is required")
         .not()
