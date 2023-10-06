@@ -101,9 +101,68 @@ This endpoint does the followings
 - Get Users transactions 
 
 ## Card
+### List Cards
+```
+{BaseUrl}/api/v1/card/listcard
+```
+- List all Cards that have been created since the existence of the plartform
+
+### Create Card
+```
+{BaseUrl}/api/v1/card/createcard
+```
+- Create a card for a user, depending on the card type
+
+### Fund Card
+```
+{BaseUrl}/api/v1/card/fundcard
+```
+- Takes amount and funds a card
+
+### Pay
+```
+{BaseUrl}/api/v1/card/pay
+```
+- End point to test if a card works by initiating payment with it
+
+### Get Card
+```
+{BaseUrl}/api/v1/card/getcard
+```
+- Takes card id and return all info about that card 
+
+### Fetch Transaction of a card 
+```
+{BaseUrl}/api/v1/card/fetch_transcard
+```
+- Fetch transactions of a card from the flutterwave server
+- We will add a card transaction table on our db to handle this soon
 
 
+### Withdraw 
+```
+{BaseUrl}/api/v1/card/withdraw
+```
+- Withdraw money from card
 
+
+### Freeze Card
+```
+{BaseUrl}/api/v1/card/freezecard
+```
+- Takes card id and Freeze the card
+
+### Gift Card
+```
+{BaseUrl}/api/v1/card/giftcard
+```
+- Gift a card to a user on the plartform 
+
+### Accept a Gifted Card
+```
+{BaseUrl}/api/v1/card/acceptcard
+```
+- Accept card that has been gifted to you
 
 # How to install
 
@@ -150,7 +209,7 @@ npm run migrate:reset
 
 ## Running API server locally
 ```
-npm start
+npm run dev
 ```
 You will know server is running by checking the output of the command `npm start`
 
