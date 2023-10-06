@@ -1,5 +1,4 @@
-# make users be able to pay card monthly fee with a one year plan
-# with a discount
+- [ ] make users be able to pay card monthly fee with a one year plan with a discount
 
 # TODO
 ## Make sure user deposit one time with creation of card
@@ -17,7 +16,7 @@ either on the DB or here
 
 
 ## Add points option 
-for each card creation and transaction, users earn points. For card creation, the point will vary depending on the card type. 
+- [ ]for each card creation and transaction, users earn points. For card creation, the point will vary depending on the card type. 
 
 - [x] Give the user the ability accept a gift card 
 - [x] When a user gifts a card, the reciever should choose wether to accept the card or reject it. For now the card is forcely added to the reciever 
