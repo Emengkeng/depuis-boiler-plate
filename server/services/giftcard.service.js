@@ -1,7 +1,7 @@
 import model from '../models';
 import creatCard from './creatcard.service'
 const uuid = require('uuid');
-const { checkCard, hasEnoughBalance } = require('./user.service')
+const { checkCard, giveBackUserMoney } = require('./user.service')
 const { sendMail } = require('./')
 const httpStatus = require("http-status");
 
@@ -15,7 +15,7 @@ const httpStatus = require("http-status");
  * @returns {Promise<giftCard>}
  */
 
-const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
+const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date, cardstatus) => {
     switch (cardType) {
         case BASICC:
             // Check if user is already subscribed to that card
@@ -33,11 +33,13 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
 
             const cardGiftUpdate = await model.GiftCard.create({
                 recipient: userId,
+                amount: amount,
                 accepted: false,
                 expiresIn: date,
                 expired: false,
                 cardType: cardType,
                 acceptLink: acceptlink,
+                status: cardstatus,
                 userId: gifterId,
             })
 
@@ -61,11 +63,13 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
 
             const ucardGiftUpdate = await model.GiftCard.creat({
                 recipient: userId,
+                amount: amount,
                 accepted: false,
                 expiresIn: date,
                 expired: false,
                 cardType: cardType,
                 acceptLink: acceptlink,
+                status: cardstatus,
                 userId: gifterId,
             })
 
@@ -90,11 +94,13 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
 
             const fcardGiftUpdate = await model.GiftCard.creat({
                 recipient: userId,
+                amount: amount,
                 accepted: false,
                 expiresIn: date,
                 expired: false,
                 cardType: cardType,
                 acceptLink: acceptlink,
+                status: cardstatus,
                 userId: gifterId,
             })
 
@@ -119,11 +125,13 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
 
             const tcardGiftUpdate = await model.GiftCard.creat({
                 recipient: userId,
+                amount: amount,
                 accepted: false,
                 expiresIn: date,
                 expired: false,
                 cardType: cardType,
                 acceptLink: acceptlink,
+                status: cardstatus,
                 userId: gifterId,
             })
 
@@ -148,11 +156,13 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
 
             const bcardGiftUpdate = await model.GiftCard.creat({
                 recipient: userId,
+                amount: amount,
                 accepted: false,
                 expiresIn: date,
                 expired: false,
                 cardType: cardType,
                 acceptLink: acceptlink,
+                status: cardstatus,
                 userId: gifterId,
             })
 
@@ -177,11 +187,13 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
 
             const scardGiftUpdate = await model.GiftCard.creat({
                 recipient: userId,
+                amount: amount,
                 accepted: false,
                 expiresIn: date,
                 expired: false,
                 cardType: cardType,
                 acceptLink: acceptlink,
+                status: cardstatus,
                 userId: gifterId,
             })
 
@@ -206,11 +218,13 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
 
             const ccardGiftUpdate = await model.GiftCard.creat({
                 recipient: userId,
+                amount: amount,
                 accepted: false,
                 expiresIn: date,
                 expired: false,
                 cardType: cardType,
                 acceptLink: acceptlink,
+                status: cardstatus,
                 userId: gifterId,
             })
 
@@ -235,11 +249,13 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
 
             const ecardGiftUpdate = await model.GiftCard.creat({
                 recipient: userId,
+                amount: amount,
                 accepted: false,
                 expiresIn: date,
                 expired: false,
                 cardType: cardType,
                 acceptLink: acceptlink,
+                status: cardstatus,
                 userId: gifterId,
             })
 
@@ -264,11 +280,13 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
 
             const rcardGiftUpdate = await model.GiftCard.creat({
                 recipient: userId,
+                amount: amount,
                 accepted: false,
                 expiresIn: date,
                 expired: false,
                 cardType: cardType,
                 acceptLink: acceptlink,
+                status: cardstatus,
                 userId: gifterId,
             })
 
@@ -293,11 +311,13 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
 
             const bbcardGiftUpdate = await model.GiftCard.creat({
                 recipient: userId,
+                amount: amount,
                 accepted: false,
                 expiresIn: date,
                 expired: false,
                 cardType: cardType,
                 acceptLink: acceptlink,
+                status: cardstatus,
                 userId: gifterId,
             })
 
@@ -311,7 +331,30 @@ const giftCard = async ( cardType, userId, recieverName, gifterId, date) => {
     }
 };
 
+const rejectCard = async(amount, gifterId, activationLink, cardstatus) => {
+
+    const check = await model.GiftCard.update({
+        accepted: false,
+        expiresIn: null,
+        expired: true,
+        status: cardstatus,
+    },
+        {
+        where:{
+            acceptLink: activationLink,
+        }
+    });
+
+    const giveback = await giveBackUserMoney(gifterId, amount)
+
+    //Todo 
+    //Email to tell user his card was rejected 
+
+    return giveback;
+}
+
 
 module.default = {
     giftCard,
+    rejectCard,
 }

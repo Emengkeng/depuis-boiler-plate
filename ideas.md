@@ -14,6 +14,14 @@ line 525
 Add budget controls setting
 either on the DB or here
 
+## in card.controller.js
+
+all fee.Cardtype should be checked 
+not sure it is actually referencing especailly line 675 - 680
+
+just updtated this to fee[cardtype], still not sure it is working,
+will confirm after testing 
+
 
 ## Add points option 
 - [ ]for each card creation and transaction, users earn points. For card creation, the point will vary depending on the card type. 

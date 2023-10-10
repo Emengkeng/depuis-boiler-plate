@@ -99,17 +99,24 @@ const findWalletByWalletC = async(wallet_code) => {
     return user
 }
 
-const hasEnoughBalance = async(userId, fee) => {
+const giveBackUserMoney = async(userId, amount) => {
     const accountDetails = await getUserBalance(userId);
     const { balance } = accountDetails.dataValues;
     console.log(balance);
 
     // Logic check before creating card
     const amt = parseFloat(balance);
-    console.log('amount', amt);
-    if (amt < fee) {
-        return false;
-    }
+    const newAmount = amt + parseFloat(amount);
+
+    const update = await model.Accounts.update({
+        balance: newAmount,
+    },{
+        where: {
+            userId: userId,
+        }
+    });
+    
+    return update;
 }
 
 const checkCard = async(userId) => {
@@ -129,6 +136,6 @@ module.exports = {
     findWalletByWalletC,
     findUserById,
     getUserBalance,
-    hasEnoughBalance,
+    giveBackUserMoney,
     checkCard,
 };

@@ -7,7 +7,7 @@ const { validationResult } = require("express-validator");
 const httpStatus = require("http-status");
 import { createCard } from '../services/creatcard.service';
 import { fundCard } from '../services/fundcard.service';
-import { giftCard } from '../services/giftcard.service';
+import { giftCard, rejectCard } from '../services/giftcard.service';
 import { findUserByEmail, findUserById, getUserBalance } from '../services/user.service';
 const catchAsync = require("../utils/catchasync");
 const BadRequestError = require("../utils/errors/badrequest.error");
@@ -18,7 +18,10 @@ require('dotenv').config();
 const create_Vcard = catchAsync(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
+        return res.status(httpStatus.BAD_REQUEST).json({ 
+            success: false, 
+            errors: errors.array() 
+        });
     }
     try {
         // Get data from req
@@ -82,7 +85,13 @@ const create_Vcard = catchAsync(async (req, res) => {
         // Logic check before creating card
         const amt = parseFloat(balance);
         console.log('amount', amt);
-        if (amt < fee.cardType) {
+
+        // New amount is the amount the user wants to deposit in 
+        //Card upon creation
+
+        const newAmount = amount + fee[cardtype];
+
+        if (amt < newAmount) {
             return res.status(403).json({
                 message: 'Not Enough Balance to Gift Card',
             });
@@ -92,7 +101,7 @@ const create_Vcard = catchAsync(async (req, res) => {
         const response = await createCard(data, cardtype, userId);
 
         //Update user Balance
-        const newBalance = amt - parseFloat(amount);
+        const newBalance = amt - parseFloat(newAmount);
         const update = await model.Accounts.update(
             {
                 balance: newBalance,
@@ -127,7 +136,10 @@ const create_Vcard = catchAsync(async (req, res) => {
 const fund_Vcard = catchAsync(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
+        return res.status(httpStatus.BAD_REQUEST).json({ 
+            success: false, 
+            errors: errors.array() 
+        });
     }
     
     try {
@@ -208,7 +220,10 @@ const fund_Vcard = catchAsync(async (req, res) => {
 const list_Vcard = catchAsync(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
+        return res.status(httpStatus.BAD_REQUEST).json({ 
+            success: false, 
+            errors: errors.array() 
+        });
     }
     try {
         const payload = {
@@ -238,7 +253,10 @@ const list_Vcard = catchAsync(async (req, res) => {
 const get_Vcard = catchAsync(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
+        return res.status(httpStatus.BAD_REQUEST).json({ 
+            success: false, 
+            errors: errors.array() 
+        });
     }
     const { cardId } = req.body
     const payload = {
@@ -266,7 +284,10 @@ const get_Vcard = catchAsync(async (req, res) => {
 const fetch_trans_Vcard = catchAsync(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
+        return res.status(httpStatus.BAD_REQUEST).json({ 
+            success: false, 
+            errors: errors.array() 
+        });
     }
     const { fromDate,toDate, cardId } = req.body;
 
@@ -299,7 +320,10 @@ const fetch_trans_Vcard = catchAsync(async (req, res) => {
 const withdraw_funds = catchAsync(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
+        return res.status(httpStatus.BAD_REQUEST).json({ 
+            success: false, 
+            errors: errors.array() 
+        });
     }
     const { amount, userId, cardId } = req.body;
     const payload = {
@@ -331,7 +355,10 @@ const withdraw_funds = catchAsync(async (req, res) => {
 const pay_Vcard = catchAsync(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
+        return res.status(httpStatus.BAD_REQUEST).json({ 
+            success: false, 
+            errors: errors.array() 
+        });
     }
     try {
         const resp = await rave.Card.charge(req.body)
@@ -355,7 +382,10 @@ const pay_Vcard = catchAsync(async (req, res) => {
 const freeze_card = catchAsync(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
+        return res.status(httpStatus.BAD_REQUEST).json({ 
+            success: false, 
+            errors: errors.array() 
+        });
     }
     const { cardId, status } = req.body;
 
@@ -419,83 +449,84 @@ const freeze_card = catchAsync(async (req, res) => {
 const gift_card = catchAsync(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
-    }
-    try {
-        
-        const { id: userId } = req.user;
-        const { cardType } = req.body;
-
-        // Find the sender by id
-        const sender = await findUserById(userId)
-        if(!sender){
-            console.log('No User Found')
-            return res.json({
-                message: 'No User Found',
-            })
-        }
-
-        // Find Reciever By Email
-        const reciever = await findUserByEmail(wallet_email)
-        if(!reciever){
-            console.log('The Reciever is not Found')
-            return res.json({
-                message: 'The Reciever is not Found',
-            })
-        }
-
-        // Get User balance 
-        const accountDetails = await getUserBalance(userId);
-        const { balance } = accountDetails.dataValues;
-        console.log(balance);
-
-        // Logic check before creating card
-        const amt = parseFloat(balance);
-        console.log('amount', amt);
-        if (amt < fee.cardType) { // 
-            return res.status(403).json({
-                message: 'Not Enough Balance to Gift Card',
-            });
-        }
-        
-        fullName = reciever.first_name + reciever.last_name;
-        //Gift Card
-        const response = await giftCard(cardType, reciever.id, fullName, sender.id, req.body.date);
-
-        //Update user Balance
-        const newBalance = amt - parseFloat(amount);
-        const update = await model.Accounts.update(
-            {
-                balance: newBalance,
-            },
-            {
-                where: {
-                    userId,
-                },
-            }
-        );
-        console.log('update', update);
-        return res.status(httpStatus.CREATED).json({
-            success: true,
-            message: "Card Gifted successfully!",
-            data: {
-                ...response
-            },
+        return res.status(httpStatus.BAD_REQUEST).json({ 
+            success: false, 
+            errors: errors.array() 
         });
+    }
+    
+    const { id: userId } = req.user;
+    const { cardtype, amount, wallet_email} = req.body;
 
-    } catch (error) {
-        // handle error here
-        return res.status(httpStatus.BAD_REQUEST).json({
-            success: false,
-            error: error,
+    // Find the sender by id
+    const sender = await findUserById(userId)
+    if(!sender){
+        console.log('No User Found')
+        return res.json({
+            message: 'No User Found',
         })
     }
+
+    // Find Reciever By Email
+    const reciever = await findUserByEmail(wallet_email)
+    if(!reciever){
+        console.log('The Reciever is not Found')
+        return res.json({
+            message: 'The Reciever is not Found',
+        })
+    }
+
+    // Get User balance 
+    const accountDetails = await getUserBalance(userId);
+    const { balance } = accountDetails.dataValues;
+    console.log(balance);
+
+    // Logic check before creating card
+    const amt = parseFloat(balance);
+    console.log('amount', amt);
+
+    const newAmount = amount + fee[cardtype];
+
+    if (amt < newAmount) { // 
+        return res.status(403).json({
+            message: 'Not Enough Balance to Gift Card',
+        });
+    }
+    
+    const fullName = reciever.first_name + reciever.last_name;
+    const status = PENDING;
+    //Gift Card
+    const response = await giftCard(cardtype, reciever.id, amount, fullName, sender.id, req.body.date, status);
+
+    //Update user Balance
+    const newBalance = amt - parseFloat(newAmount);
+    const update = await model.Accounts.update(
+        {
+            balance: newBalance,
+        },
+        {
+            where: {
+                userId,
+            },
+        }
+    );
+    console.log('update', update);
+    return res.status(httpStatus.CREATED).json({
+        success: true,
+        message: "Card Gifted successfully!",
+        data: {
+            ...response
+        },
+    });
 })
 
 const accept_gift_card = catchAsync(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
+        return res.status(httpStatus.BAD_REQUEST).json({ 
+            success: false, 
+            errors: errors.array() 
+        });
     }
 
     const activationLink = req.params.link;
@@ -526,8 +557,11 @@ const accept_gift_card = catchAsync(async (req, res) => {
         })
     }
 
-    const { 
-        amount, 
+    //Check from gift card table
+    const newAmount = check.amount;
+    const newcardtype = check.cardtype;
+
+    const {  
         billing_name, 
         billing_address, 
         billing_city, 
@@ -541,8 +575,6 @@ const accept_gift_card = catchAsync(async (req, res) => {
         phone,
         title,
         gender,
-        cardtype,
-        wallet_email,
     } = req.body;
 
     const { id: userId } = req.user;
@@ -550,7 +582,7 @@ const accept_gift_card = catchAsync(async (req, res) => {
     const data = /* JSON.stringify */(
         {
             "currency": "USD",
-            "amount": amount,
+            "amount": newAmount,
             "debit_currency": "USD",
             "billing_name": billing_name, //"Example User."
             "billing_address": billing_address, //"333, Fremont Street"
@@ -580,14 +612,20 @@ const accept_gift_card = catchAsync(async (req, res) => {
 
     
     //Gift Card
-    const response = await createCard(data, cardtype, userId);
-
+    const response = await createCard(data, newcardtype, userId);
+    const status = COMPLETED
     // Update GiftCard table to accepted
-    await model.GiftCard.update({accepted:true, expiresIn: null, expired: true, },{
+    await model.GiftCard.update({
+        accepted:true, 
+        expiresIn: null, 
+        expired: true,
+        status: status, 
+    },{
         where: {
             acceptLink: activationLink,
         }
     });
+    
     return res.status(httpStatus.CREATED).json({
         success: true,
         message: "Card Gifted successfully!",
@@ -595,6 +633,68 @@ const accept_gift_card = catchAsync(async (req, res) => {
             ...response
         },
     });
+})
+
+const reject_gift_card = catchAsync(async() => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(httpStatus.BAD_REQUEST).json({ 
+            success: false, 
+            errors: errors.array() 
+        });
+    }
+
+    //Logic Check
+    const activationLink = req.params.link;
+    const check = await model.GiftCard.findOne({
+        where:{
+            acceptLink: activationLink,
+        }
+    });
+
+    if (!check) {
+        return res.status(httpStatus.BAD_REQUEST).json({
+            success: false,
+            message: "Incorrect Card Rejection Code",
+        })
+    }
+
+    if (req.user.id != check.recipient){
+        return res.status(httpStatus.BAD_REQUEST).json({
+            success: false,
+            message: "You are Not Authorize to Reject This Card",
+        })
+    }
+
+    if (check.accepted == true){
+        return res.status(httpStatus.BAD_REQUEST).json({
+            success: false,
+            message: "Card Already Claimed",
+        })
+    }
+
+    if (check.expired == true){
+        return res.status(httpStatus.BAD_REQUEST).json({
+            success: false,
+            message: "Card Has Already Expired",
+        })
+    }
+
+    //Check from gift card table
+    const newcardtype = check.cardType;
+    const newAmount = check.amount + fee[newcardtype];
+    const gifterId = check.userId;
+    const status = REJECTED;
+    const response = await rejectCard(newAmount, gifterId, activationLink, status)
+
+    return res.status(httpStatus.CREATED).json({
+        success: true,
+        message: "Card Rejected successfully!",
+        data: {
+            ...response
+        },
+    });
+
 })
 
 module.exports = {
@@ -608,4 +708,5 @@ module.exports = {
     freeze_card,
     create_Vcard,
     accept_gift_card,
+    reject_gift_card,
 }

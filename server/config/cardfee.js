@@ -13,4 +13,12 @@ const fee = {
     BUDGETC: process.env.BUDGETC ,
 };
 
-module.exports = fee
+plartform = {
+
+}
+
+module.exports = {
+    fee,
+    plartform,
+}
+

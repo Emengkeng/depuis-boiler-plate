@@ -27,5 +27,7 @@ router.post('/card/giftcard', [auth], cardController.gift_card);
 
 router.post('/card/acceptcard', [auth], cardController.accept_gift_card);
 
+router.post('/card/rejectgift', [auth], cardController.reject_gift_card);
+
 
 module.export = router;

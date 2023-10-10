@@ -4,6 +4,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        amount: {
+            type: DataTypes.DECIMAL,
+            allowNull: false,
+            defaultValue: '0',
+        },
         accepted: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
@@ -25,6 +30,12 @@ module.exports = (sequelize, DataTypes) => {
         acceptLink: {
             type: DataTypes.STRING,
             allowNull: true,
+        },
+        status: {
+            type: DataTypes.ENUM({
+                values: ['PENDING', 'COMPLETED', 'REJECTED', 'CANCELLED']
+            }),
+            defaultValue: 'PENDING',
         },
     });
     GiftCard.associate = (models) => {
