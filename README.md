@@ -220,11 +220,15 @@ npm run migrate:reset
 # How to run
 
 ## Running API server locally
-```
-npm run dev
+```sh
+sh dev-sript.sh
 ```
 You will know server is running by checking the output of the command `npm start`
 
+## Running API server on The Web
+```sh
+sh production-sript.sh
+```
 
 
 # Running Tests
