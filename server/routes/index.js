@@ -9,7 +9,7 @@ router.use('/api/v1', walletRoute);
 router.use('/api/v1', transactionRoute);
 
 router.get('/', (req, res) => {
-    return res.status(200).json({ message: 'You are Allowed Here' });
+    return res.status(200).json({ message: 'You are Not Allowed Here' });
 });
 
 module.exports = router;
