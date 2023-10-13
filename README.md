@@ -1,5 +1,8 @@
-# E-wallet-virtual-card-system
+# Best E-wallet-virtual-card-system
 This system allow users to fund their account, transfer funds and withdraw from their account, and also subscribe to virtual credit card
+
+# Note
+Application is still under developement, new features may be added weekly 
 
 # Features
 - Basic Authentication (Register & Login)
@@ -15,8 +18,17 @@ This system allow users to fund their account, transfer funds and withdraw from 
 - Fund Card
 - Get Card Transactions
 - Withdraw from card
-- 
 
+# Tech Stack
+- javascript
+- nodejs
+- mysql
+- express
+
+# Todo
+[ ] Switch from using axios in the deposit and withdrawal, to using flutterwave rave package
+
+[ ] 
 # API End Points
 ## Users
 ### Register
@@ -216,7 +228,6 @@ You will know server is running by checking the output of the command `npm start
 
 
 # Running Tests
-# Todo
 ```
 npm test
 ```

@@ -23,7 +23,6 @@ const create_Vcard = catchAsync(async (req, res) => {
             errors: errors.array() 
         });
     }
-    try {
         // Get data from req
         const { 
             amount, 
@@ -123,13 +122,6 @@ const create_Vcard = catchAsync(async (req, res) => {
             },
         });
 
-    } catch (error) {
-        // handle error here
-        return res.status(httpStatus.BAD_REQUEST).json({
-            success: false,
-            error: error,
-        })
-    }
 });
 
     // Fund a virtual card

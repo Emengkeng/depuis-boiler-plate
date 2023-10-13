@@ -1,7 +1,7 @@
 {
   "name": "vcard_wallet",
   "version": "1.0.0",
-  "description": "This system allow users to fund their account, transfer funds and withdraw from their account.",
+  "description": "This system allow users to fund their account, transfer funds and withdraw from their account, and also subscribe to virtual credit card",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon --exec babel-node ./server/app.js",
