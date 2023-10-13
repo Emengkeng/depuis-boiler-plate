@@ -1,5 +1,5 @@
 # Best E-wallet-virtual-card-system
-This system allow users to fund their account, transfer funds and withdraw from their account, and also subscribe to virtual credit card
+This system allow users to fund their account, transfer funds and withdraw from their account, and also subscribe to Real virtual credit card
 
 # Note
 Application is still under developement, new features may be added weekly 
