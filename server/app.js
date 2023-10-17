@@ -6,6 +6,7 @@ const cors = require("cors");
 const routes = require("./routes");
 const errorHandler = require("./middlewares/error-handler");
 const NotFoundError = require("./utils/errors/notfound.error");
+import { func } from 'joi';
 import db from './models';
 require("dotenv/config");
 
@@ -22,7 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 
 
 (async () => {
-  await db.sequelize.sync();
+  await db.sequelize.sync().then(function(){
+    console.log('db is up')
+  });
 })();
 // sanitize request data
 app.use(xss());

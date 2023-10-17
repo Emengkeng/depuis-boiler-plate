@@ -13,7 +13,7 @@ import { findUserByEmail, findUserById, getUserBalance } from '../services/user.
  * @param {String} redirect_url
  * @returns {Promise<Card>}
  */
-const createCard = async (data, cardType, userId) => {
+const createCard = async (data, cardType, UserId) => {
     switch(cardType){
     //Basic Card
     // Can be loaded up to 5 times
@@ -24,30 +24,30 @@ const createCard = async (data, cardType, userId) => {
 
             // Check if user is already subscribed to that card
             // and if so, refuse to create duplicate
-            const checkCard = await model.CardType.findOne({
+            const checkCard = await model.CardTypes.findOne({
                 where: {
-                    userId: userId,
+                    UserId: UserId,
                 },
                 });
 
-            if (checkCard.name == 'BASICC') {
+            if (checkCard.name == 'BASICC' || checkCard.expired == true) {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
                 });
             }
 
-            const cardTypeUpdate = await model.CardType.create({
+            const cardTypeUpdate = await model.CardTypes.create({
                     name: cardType,
                     loadable: loadable,
                     creationFee: parseFloat(5),
                     monthlyFee: parseFloat(0),
-                    userId: userId,
+                    UserId: UserId,
             });
-            const cardfee = await model.CardFee.create({
+            const cardfee = await model.CardFees.create({
                 monthlyFee: parseFloat(0),
-                userId: userId,
-                cardTypeId: cardTypeUpdate.id,
+                UserId: UserId,
+                CardTypeId: cardTypeUpdate.id,
             })
 
                 //Create card
@@ -55,10 +55,10 @@ const createCard = async (data, cardType, userId) => {
             const { id } = response;
 
             //create card table on our db
-            const cardUpdate = await model.Card.create({
+            const cardUpdate = await model.Cards.create({
                 cardIds: id,
-                userId: userId,
-                cardTypeId: cardTypeUpdate.id
+                UserId: UserId,
+                CardTypeId: cardTypeUpdate.id
             });
 
             // Update card type model with card id
@@ -68,7 +68,7 @@ const createCard = async (data, cardType, userId) => {
                 },
                 {
                     where: {
-                        userId,
+                        UserId,
                     },
                 }
             );
@@ -88,13 +88,13 @@ const createCard = async (data, cardType, userId) => {
 
             // Check if user is already subscribed to that card.
             // and if so, refuse to create duplicate
-            const ucheckCard = await model.CardType.findOne({
+            const ucheckCard = await model.CardTypes.findOne({
                 where: {
-                    userId: userId,
+                    UserId: UserId,
                 },
                 });
 
-            if (ucheckCard.name == 'UNLIMITEDC') {
+            if (ucheckCard.name == 'UNLIMITEDC' || checkCard.expired == true) {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
@@ -103,27 +103,27 @@ const createCard = async (data, cardType, userId) => {
 
             /* //Have to scrutinice this again 
             // Check if user has enough balance
-            const uaccount = await hasEnoughBalance(userId, fee.UNLIMITEDC);
+            const uaccount = await hasEnoughBalance(UserId, fee.UNLIMITEDC);
             if(!uaccount){
                 return res.status(403).json({
                     message: 'Not Enough Balance to Create Card',
                 });
             } */
 
-            const ucardTypeUpdate = await model.CardType.create({
+            const ucardTypeUpdate = await model.CardTypes.create({
                 name: cardType,
                 uloadable: true,
                 isFreezable: true,
                 isWithdrawable: true,
                 creationFee: parseFloat(15),
                 monthlyFee: parseFloat(5),
-                userId: userId,
+                UserId: UserId,
             });
 
-            const ucardfee = await model.CardFee.create({
+            const ucardfee = await model.CardFees.create({
                 monthlyFee: parseFloat(5),
-                userId: userId,
-                cardTypeId: ucardTypeUpdate.id,
+                UserId: UserId,
+                CardTypeId: ucardTypeUpdate.id,
             })
 
             //Create card
@@ -131,10 +131,10 @@ const createCard = async (data, cardType, userId) => {
             
 
             //create card table on our db
-            const ucardUpdate = await model.Card.create({
+            const ucardUpdate = await model.Cards.create({
                 cardIds: uresponse.id,
-                userId: userId,
-                cardTypeId: ucardTypeUpdate.id
+                UserId: UserId,
+                CardTypeId: ucardTypeUpdate.id
             });
 
             // Update card type model with card id
@@ -144,7 +144,7 @@ const createCard = async (data, cardType, userId) => {
                 },
                 {
                     where: {
-                        userId,
+                        UserId,
                     },
                 }
             );
@@ -165,13 +165,13 @@ const createCard = async (data, cardType, userId) => {
 
             // Check if user is already subscribed to that card
             // anf if so, refuse to create duplicate
-            const fcheckCard = await model.CardType.findOne({
+            const fcheckCard = await model.CardTypes.findOne({
                 where: {
-                    userId: userId,
+                    UserId: UserId,
                 },
                 });
 
-            if (fcheckCard.name == 'FAMILYC') {
+            if (fcheckCard.name == 'FAMILYC' || checkCard.expired == true) {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
@@ -180,7 +180,7 @@ const createCard = async (data, cardType, userId) => {
 
            /*  //Have to scrutinice this again 
             // Check if user has enough balance
-            const faccount = await hasEnoughBalance(userId, fee.FAMILYC);
+            const faccount = await hasEnoughBalance(UserId, fee.FAMILYC);
             if(!faccount){
                 return res.status(403).json({
                     message: 'Not Enough Balance to Create Card',
@@ -188,18 +188,18 @@ const createCard = async (data, cardType, userId) => {
             }
  */
 
-            const fcardTypeUpdate = await model.CardType.create({
+            const fcardTypeUpdate = await model.CardTypes.create({
                 name: cardType,
                 uloadable: true,
                 creationFee: parseFloat(12),
                 monthlyFee: parseFloat(3),
-                userId: userId,
+                UserId: UserId,
             });
 
-            const fcardfee = await model.CardFee.create({
+            const fcardfee = await model.CardFees.create({
                 monthlyFee: parseFloat(3),
-                userId: userId,
-                cardTypeId: fcardTypeUpdate.id,
+                UserId: UserId,
+                CardTypeId: fcardTypeUpdate.id,
             })
 
             //Create card
@@ -207,10 +207,10 @@ const createCard = async (data, cardType, userId) => {
             
 
             //create card table on our db
-            const fcardUpdate = await model.Card.create({
+            const fcardUpdate = await model.Cards.create({
                 cardIds: fresponse.id,
-                userId: userId,
-                cardTypeId: fcardTypeUpdate.id
+                UserId: UserId,
+                CardTypeId: fcardTypeUpdate.id
             });
 
             // Update card type model with card id
@@ -220,7 +220,7 @@ const createCard = async (data, cardType, userId) => {
                 },
                 {
                     where: {
-                        userId,
+                        UserId,
                     },
                 }
             );
@@ -237,13 +237,13 @@ const createCard = async (data, cardType, userId) => {
 
             // Check if user is already subscribed to that card
             // anf if so, refuse to create duplicate
-            const tcheckCard = await model.CardType.findOne({
+            const tcheckCard = await model.CardTypes.findOne({
                 where: {
-                    userId: userId,
+                    UserId: UserId,
                 },
                 });
 
-            if (tcheckCard.name == 'TRAVELC') {
+            if (tcheckCard.name == 'TRAVELC' || checkCard.expired == true) {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
@@ -252,7 +252,7 @@ const createCard = async (data, cardType, userId) => {
 
             /* //Have to scrutinice this again 
             // Check if user has enough balance
-            const taccount = await hasEnoughBalance(userId, fee.TRAVELC);
+            const taccount = await hasEnoughBalance(UserId, fee.TRAVELC);
             if(!taccount){
                 return res.status(403).json({
                     message: 'Not Enough Balance to Create Card',
@@ -260,20 +260,20 @@ const createCard = async (data, cardType, userId) => {
             } */
 
             //Else
-            const tcardTypeUpdate = await model.CardType.create({
+            const tcardTypeUpdate = await model.CardTypes.create({
                 name: cardType,
                 uloadable: true,
                 isFreezable: true,
                 isWithdrawable: true,
                 creationFee: parseFloat(8),
                 monthlyFee: parseFloat(1),
-                userId: userId,
+                UserId: UserId,
             });
 
-            const tcardfee = await model.CardFee.create({
+            const tcardfee = await model.CardFees.create({
                 monthlyFee: parseFloat(1),
-                userId: userId,
-                cardTypeId: tcardTypeUpdate.id,
+                UserId: UserId,
+                CardTypeId: tcardTypeUpdate.id,
             })
 
             //Create card
@@ -281,10 +281,10 @@ const createCard = async (data, cardType, userId) => {
             
 
             //create card table on our db
-            const tcardUpdate = await model.Card.create({
+            const tcardUpdate = await model.Cards.create({
                 cardIds: tresponse.id,
-                userId: userId,
-                cardTypeId: tcardTypeUpdate.id
+                UserId: UserId,
+                CardTypeId: tcardTypeUpdate.id
             });
 
             // Update card type model with card id
@@ -294,7 +294,7 @@ const createCard = async (data, cardType, userId) => {
                 },
                 {
                     where: {
-                        userId,
+                        UserId,
                     },
                 }
             );
@@ -311,13 +311,13 @@ const createCard = async (data, cardType, userId) => {
 
             // Check if user is already subscribed to that card
             // anf if so, refuse to create duplicate
-            const bcheckCard = await model.CardType.findOne({
+            const bcheckCard = await model.CardTypes.findOne({
                 where: {
-                    userId: userId,
+                    UserId: UserId,
                 },
                 });
 
-            if (bcheckCard.name == 'BUSINESSC') {
+            if (bcheckCard.name == 'BUSINESSC' || checkCard.expired == true) {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
@@ -326,37 +326,37 @@ const createCard = async (data, cardType, userId) => {
 
             /* //Have to scrutinice this again 
             // Check if user has enough balance
-            const baccount = await hasEnoughBalance(userId, fee.BUSINESSC);
+            const baccount = await hasEnoughBalance(UserId, fee.BUSINESSC);
             if(!baccount){
                 return res.status(403).json({
                     message: 'Not Enough Balance to Create Card',
                 });
             } */
 
-            const bcardTypeUpdate = await model.CardType.create({
+            const bcardTypeUpdate = await model.CardTypes.create({
                 name: cardType,
                 uloadable: true,
                 isFreezable: true,
                 isWithdrawable: true,
                 creationFee: parseFloat(20),
                 monthlyFee: parseFloat(5),
-                userId: userId,
+                UserId: UserId,
             });
 
-            const bcardfee = await model.CardFee.create({
+            const bcardfee = await model.CardFees.create({
                 monthlyFee: parseFloat(5),
-                userId: userId,
-                cardTypeId: bcardTypeUpdate.id,
+                UserId: UserId,
+                CardTypeId: bcardTypeUpdate.id,
             })
 
             //Create card
             const bresponse = await rave.VirtualCards.create(data);
             
             //create card table on our db
-            const bcardUpdate = await model.Card.create({
+            const bcardUpdate = await model.Cards.create({
                 cardIds: bresponse.id,
-                userId: userId,
-                cardTypeId: bcardTypeUpdate.id
+                UserId: UserId,
+                CardTypeId: bcardTypeUpdate.id
             });
 
             // Update card type model with card id
@@ -366,7 +366,7 @@ const createCard = async (data, cardType, userId) => {
                 },
                 {
                     where: {
-                        userId,
+                        UserId,
                     },
                 }
             );
@@ -382,13 +382,13 @@ const createCard = async (data, cardType, userId) => {
 
             // Check if user is already subscribed to that card
             // anf if so, refuse to create duplicate
-            const scheckCard = await model.CardType.findOne({
+            const scheckCard = await model.CardTypes.findOne({
                 where: {
-                    userId: userId,
+                    UserId: UserId,
                 },
                 });
 
-            if (scheckCard.name == 'STUDENTC') {
+            if (scheckCard.name == 'STUDENTC' || checkCard.expired == true) {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
@@ -397,24 +397,24 @@ const createCard = async (data, cardType, userId) => {
 
             /* //Have to scrutinice this again 
             // Check if user has enough balance
-            const saccount = await hasEnoughBalance(userId, fee.STUDENTC);
+            const saccount = await hasEnoughBalance(UserId, fee.STUDENTC);
             if(!saccount){
                 return res.status(403).json({
                     message: 'Not Enough Balance to Create Card',
                 });
             } */
 
-            const scardTypeUpdate = await model.CardType.create({
+            const scardTypeUpdate = await model.CardTypes.create({
                 name: cardType,
                 creationFee: parseFloat(5),
                 monthlyFee: parseFloat(0),
-                userId: userId,
+                UserId: UserId,
             });
 
-            const scardfee = await model.CardFee.create({
+            const scardfee = await model.CardFees.create({
                 monthlyFee: parseFloat(0),
-                userId: userId,
-                cardTypeId: scardTypeUpdate.id,
+                UserId: UserId,
+                CardTypeId: scardTypeUpdate.id,
             })
 
             //Create card
@@ -422,10 +422,10 @@ const createCard = async (data, cardType, userId) => {
             
 
             //create card table on our db
-            const scardUpdate = await model.Card.create({
+            const scardUpdate = await model.Cards.create({
                 cardIds: sresponse.id,
-                userId: userId,
-                cardTypeId: scardTypeUpdate.id
+                UserId: UserId,
+                CardTypeId: scardTypeUpdate.id
             });
 
             // Update card type model with card id
@@ -435,7 +435,7 @@ const createCard = async (data, cardType, userId) => {
                 },
                 {
                     where: {
-                        userId,
+                        UserId,
                     },
                 }
             ); */
@@ -453,13 +453,13 @@ const createCard = async (data, cardType, userId) => {
 
             // Check if user is already subscribed to that card
             // anf if so, refuse to create duplicate
-            const ccheckCard = await model.CardType.findOne({
+            const ccheckCard = await model.CardTypes.findOne({
                 where: {
-                    userId: userId,
+                    UserId: UserId,
                 },
                 });
 
-            if (ccheckCard.name == 'CHARITYC') {
+            if (ccheckCard.name == 'CHARITYC' || checkCard.expired == true) {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
@@ -468,37 +468,37 @@ const createCard = async (data, cardType, userId) => {
 
             /* //Have to scrutinice this again 
             // Check if user has enough balance
-            const caccount = await hasEnoughBalance(userId, fee.CHARITYC);
+            const caccount = await hasEnoughBalance(UserId, fee.CHARITYC);
             if(!caccount){
                 return res.status(403).json({
                     message: 'Not Enough Balance to Create Card',
                 });
             } */
 
-            const ccardTypeUpdate = await model.CardType.create({
+            const ccardTypeUpdate = await model.CardTypes.create({
                 name: cardType,
                 uloadable: true,
                 isFreezable: true,
                 isWithdrawable: true,
                 creationFee: parseFloat(8),
                 monthlyFee: parseFloat(2),
-                userId: userId,
+                UserId: UserId,
             });
 
-            const ccardfee = await model.CardFee.create({
+            const ccardfee = await model.CardFees.create({
                 monthlyFee: parseFloat(2),
-                userId: userId,
-                cardTypeId: ccardTypeUpdate.id,
+                UserId: UserId,
+                CardTypeId: ccardTypeUpdate.id,
             })
 
             //Create card
             const cresponse = await rave.VirtualCards.create(data);
             
             //create card table on our db
-            const ccardUpdate = await model.Card.create({
+            const ccardUpdate = await model.Cards.create({
                 cardIds: cresponse.id,
-                userId: userId,
-                cardTypeId: ccardTypeUpdate.id
+                UserId: UserId,
+                CardTypeId: ccardTypeUpdate.id
             });
 
             // Update card type model with card id
@@ -508,7 +508,7 @@ const createCard = async (data, cardType, userId) => {
                 },
                 {
                     where: {
-                        userId,
+                        UserId,
                     },
                 }
             );
@@ -526,13 +526,13 @@ const createCard = async (data, cardType, userId) => {
 
             // Check if user is already subscribed to that card
             // anf if so, refuse to create duplicate
-            const echeckCard = await model.CardType.findOne({
+            const echeckCard = await model.CardTypes.findOne({
                 where: {
-                    userId: userId,
+                    UserId: UserId,
                 },
                 });
 
-            if (echeckCard.name == 'EXCLUSIVEC') {
+            if (echeckCard.name == 'EXCLUSIVEC' || checkCard.expired == true) {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
@@ -541,27 +541,27 @@ const createCard = async (data, cardType, userId) => {
 
             /* //Have to scrutinice this again 
             // Check if user has enough balance
-            const eaccount = await hasEnoughBalance(userId, fee.EXCLUSIVEC);
+            const eaccount = await hasEnoughBalance(UserId, fee.EXCLUSIVEC);
             if(!eaccount){
                 return res.status(403).json({
                     message: 'Not Enough Balance to Create Card',
                 });
             } */
 
-            const ecardTypeUpdate = await model.CardType.create({
+            const ecardTypeUpdate = await model.CardTypes.create({
                 name: cardType,
                 uloadable: true,
                 isFreezable: true,
                 isWithdrawable: true,
                 creationFee: parseFloat(25),
                 monthlyFee: parseFloat(10),
-                userId: userId,
+                UserId: UserId,
             });
 
-            const ecardfee = await model.CardFee.create({
+            const ecardfee = await model.CardFees.create({
                 monthlyFee: parseFloat(10),
-                userId: userId,
-                cardTypeId: ecardTypeUpdate.id,
+                UserId: UserId,
+                CardTypeId: ecardTypeUpdate.id,
             })
 
             //Create card
@@ -569,10 +569,10 @@ const createCard = async (data, cardType, userId) => {
             
 
             //create card table on our db
-            const ecardUpdate = await model.Card.create({
+            const ecardUpdate = await model.Cards.create({
                 cardIds: eresponse.id,
-                userId: userId,
-                cardTypeID: ecardTypeUpdate.id
+                UserId: UserId,
+                CardTypeId: ecardTypeUpdate.id
             });
 
             // Update card type model with card id
@@ -582,7 +582,7 @@ const createCard = async (data, cardType, userId) => {
                 },
                 {
                     where: {
-                        userId,
+                        UserId,
                     },
                 }
             );
@@ -604,13 +604,13 @@ const createCard = async (data, cardType, userId) => {
 
             // Check if user is already subscribed to that card
             // anf if so, refuse to create duplicate
-            const rcheckCard = await model.CardType.findOne({
+            const rcheckCard = await model.CardTypes.findOne({
                 where: {
-                    userId: userId,
+                    UserId: UserId,
                 },
                 });
 
-            if (rcheckCard.name == 'REWARDC') {
+            if (rcheckCard.name == 'REWARDC' || checkCard.expired == true) {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
@@ -619,24 +619,24 @@ const createCard = async (data, cardType, userId) => {
 
             /* //Have to scrutinice this again 
             // Check if user has enough balance
-            const raccount = await hasEnoughBalance(userId, fee.REWARDC);
+            const raccount = await hasEnoughBalance(UserId, fee.REWARDC);
             if(!raccount){
                 return res.status(403).json({
                     message: 'Not Enough Balance to Create Card',
                 });
             } */
 
-            const rcardTypeUpdate = await model.CardType.create({
+            const rcardTypeUpdate = await model.CardTypes.create({
                 name: cardType,
                 creationFee: parseFloat(0),
                 monthlyFee: parseFloat(0),
-                userId: userId,
+                UserId: UserId,
             });
 
-            const rcardfee = await model.CardFee.create({
+            const rcardfee = await model.CardFees.create({
                 monthlyFee: parseFloat(0),
-                userId: userId,
-                cardTypeId: rcardTypeUpdate.id,
+                UserId: UserId,
+                CardTypeId: rcardTypeUpdate.id,
             })
 
             //Create card
@@ -644,10 +644,10 @@ const createCard = async (data, cardType, userId) => {
             
 
             //create card table on our db
-            const rcardUpdate = await model.Card.create({
+            const rcardUpdate = await model.Cards.create({
                 cardIds: rresponse.id,
-                userId: userId,
-                cardTypeId: rcardTypeUpdate.id
+                UserId: UserId,
+                CardTypeId: rcardTypeUpdate.id
             });
 
             // Update card type model with card id
@@ -657,7 +657,7 @@ const createCard = async (data, cardType, userId) => {
                 },
                 {
                     where: {
-                        userId,
+                        UserId,
                     },
                 }
             );
@@ -677,13 +677,13 @@ const createCard = async (data, cardType, userId) => {
 
             // Check if user is already subscribed to that card
             // anf if so, refuse to create duplicate
-            const bbcheckCard = await model.CardType.findOne({
+            const bbcheckCard = await model.CardTypes.findOne({
                 where: {
-                    userId: userId,
+                    UserId: UserId,
                 },
                 });
 
-            if (bbcheckCard.name == 'BUDGETC') {
+            if (bbcheckCard.name == 'BUDGETC' || checkCard.expired == true) {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     success: false,
                     message: "ALready Subscribed To This Card",
@@ -692,25 +692,25 @@ const createCard = async (data, cardType, userId) => {
 
             /* //Have to scrutinice this again 
             // Check if user has enough balance
-            const bbaccount = await hasEnoughBalance(userId, fee.BUDGETC);
+            const bbaccount = await hasEnoughBalance(UserId, fee.BUDGETC);
             if(!bbaccount){
                 return res.status(403).json({
                     message: 'Not Enough Balance to Create Card',
                 });
             } */
 
-            const bbcardTypeUpdate = await model.CardType.create({
+            const bbcardTypeUpdate = await model.CardTypes.create({
                 name: cardType,
                 uloadable: true,
                 creationFee: parseFloat(8),
                 monthlyFee: parseFloat(1),
-                userId: userId,
+                UserId: UserId,
             });
 
-            const bbcardfee = await model.CardFee.create({
+            const bbcardfee = await model.CardFees.create({
                 monthlyFee: parseFloat(1),
-                userId: userId,
-                cardTypeId: bbcardTypeUpdate.id,
+                UserId: UserId,
+                CardTypeId: bbcardTypeUpdate.id,
             })
 
             //Create card
@@ -718,10 +718,10 @@ const createCard = async (data, cardType, userId) => {
             
 
             //create card table on our db
-            const bbcardUpdate = await model.Card.create({
+            const bbcardUpdate = await model.Cards.create({
                 cardIds: bbresponse.id,
-                userId: userId,
-                cardTypeId: bbcardTypeUpdate.id
+                UserId: UserId,
+                CardTypeId: bbcardTypeUpdate.id
             });
 
             // Update card type model with card id
@@ -731,7 +731,7 @@ const createCard = async (data, cardType, userId) => {
                 },
                 {
                     where: {
-                        userId,
+                        UserId,
                     },
                 }
             );

@@ -30,23 +30,23 @@ const getTransactions = async (transactionData) => {
 
     const { limit, offset } = getPagination(transactionData.page, transactionData.limit);
 
-    await model.Transactions.findAll({
+    const transactions = await model.Transactions.findAll({
         limit: limit,
         offset: offset,
         where: {
-            userId: transactionData.userId,
+            UserId: transactionData.UserId,
         },
     })
-    .then(data => {
-        const response = getPagingData(data, page, limit);
-        return (response);
-    })
-    .catch(err => {
-        return({
-        message: "Some error occurred while retrieving transactions."
-        });
-    })
-    //const transactions = await db("transactions").where("user_id", transactionData.userId).orderBy("id", "desc").paginate({ perPage: transactionData.limit, currentPage: transactionData.page, isLengthAware: true });
+        .then(data => {
+            const response = getPagingData(data, page, limit);
+            return (response);
+        })
+        .catch(err => {
+            return ({
+                message: "Some error occurred while retrieving transactions."
+            });
+        })
+    //const transactions = await db("transactions").where("user_id", transactionData.UserId).orderBy("id", "desc").paginate({ perPage: transactionData.limit, currentPage: transactionData.page, isLengthAware: true });
     return transactions;
 };
 

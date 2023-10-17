@@ -4,7 +4,7 @@ const catchAsync = require("../utils/catchasync");
 
 const getTransactions = catchAsync(async (req, res) => {
   const transactionData = {
-    userId: req.user.id,
+    UserId: req.user.id,
     limit: req.query.limit,
     page: req.query.page,
   };

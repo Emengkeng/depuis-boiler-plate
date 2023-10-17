@@ -15,7 +15,8 @@ const register = catchAsync(async (req, res) => {
   }
   const user = await userService.createUser(req.body);
 
-  await walletService.createWallet(user[0]);
+  await walletService.createWallet(user.id);
+  await userService.createProfile(user.id, user.first_name);
 
   return res.status(httpStatus.CREATED).send({
     success: true,
@@ -72,7 +73,7 @@ const getProfile = catchAsync(async (req, res) => {
 
 const getAllusers = catchAsync(async (req, res) => {
   const data = await model.Users.findAll({
-    include: [model.Wallet, model.Profiles, model.Card, model.CardType],
+    include: [model.Wallets], //, model.Profiles, model.Cards, model.CardTypes
   });
   return res.status(httpStatus.OK).send({
     success: true,

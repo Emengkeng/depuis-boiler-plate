@@ -42,7 +42,7 @@ const create_Vcard = catchAsync(async (req, res) => {
             cardtype,
         } = req.body;
 
-        const { id: userId } = req.user;
+        const { id: UserId } = req.user;
 
         const data = /* JSON.stringify */(
             {
@@ -67,7 +67,7 @@ const create_Vcard = catchAsync(async (req, res) => {
         )
 
         // Find User
-        const user = await findUserById(userId);
+        const user = await findUserById(UserId);
         
         if(!user) {
             console.log('No user Found')
@@ -77,7 +77,7 @@ const create_Vcard = catchAsync(async (req, res) => {
         }
 
         // Get User balance 
-        const accountDetails = await getUserBalance(userId);
+        const accountDetails = await getUserBalance(UserId);
         const { balance } = accountDetails.dataValues;
         console.log(balance);
 
@@ -97,7 +97,7 @@ const create_Vcard = catchAsync(async (req, res) => {
         }
         
         //Create Card
-        const response = await createCard(data, cardtype, userId);
+        const response = await createCard(data, cardtype, UserId);
 
         //Update user Balance
         const newBalance = amt - parseFloat(newAmount);
@@ -107,7 +107,7 @@ const create_Vcard = catchAsync(async (req, res) => {
             },
             {
                 where: {
-                    userId,
+                    UserId,
                 },
             }
         );
@@ -135,7 +135,7 @@ const fund_Vcard = catchAsync(async (req, res) => {
     }
     
     try {
-        const { id: userId } = req.user;
+        const { id: UserId } = req.user;
         const { CardId, amount} = req.body;
         const { cardType } = req.body;
 
@@ -147,7 +147,7 @@ const fund_Vcard = catchAsync(async (req, res) => {
 
 
             // Find Card
-        const card = await model.Card.findOne({
+        const card = await model.Cards.findOne({
             where: {
                 cardIds: CardId,
             }
@@ -162,7 +162,7 @@ const fund_Vcard = catchAsync(async (req, res) => {
 
         // Get User balance 
         const accountDetails = await model.Accounts.findOne({
-            where: { UserId: userId },
+            where: { UserId: UserId },
         });
         const { balance } = accountDetails.dataValues;
 
@@ -183,14 +183,14 @@ const fund_Vcard = catchAsync(async (req, res) => {
             },
             {
                 where: {
-                    userId,
+                    UserId,
                 },
             }
         );
         console.log('update', update);
 
         const response = await rave.VirtualCards.fund(data);
-        //const response = await fundCard(data, cardType, userId);
+        //const response = await fundCard(data, cardType, UserId);
         
         return res.status(httpStatus.CREATED).json({
             success: true,
@@ -217,26 +217,18 @@ const list_Vcard = catchAsync(async (req, res) => {
             errors: errors.array() 
         });
     }
-    try {
-        const payload = {
-            page:1
-        };
-        const response = await rave.VirtualCards.list(payload);
-    
-        return res.status(httpStatus.OK).json({
-            success: true,
-            message: "List Of All Cards",
-            data: {
-                ...response
-            },
-        });
-    } catch (error) {
-            // handle error here
-        return res.status(httpStatus.BAD_REQUEST).json({
-            success: false,
-            error: error,
-        })
-    }
+    const payload = {
+        page:req.body.payload,
+    };
+    const response = await rave.VirtualCards.list(payload);
+
+    return res.status(httpStatus.OK).json({
+        success: true,
+        message: "List Of All Cards",
+        data: {
+            ...response
+        },
+    });
 });
 
     
@@ -258,7 +250,7 @@ const get_Vcard = catchAsync(async (req, res) => {
         const response = await rave.VirtualCards.get(payload);
         return res.status(httpStatus.OK).json({
             success: true,
-            message: "Here is The Cards",
+            message: "Card Gotten Succesfully",
             data: {
                 ...response
             },
@@ -317,7 +309,7 @@ const withdraw_funds = catchAsync(async (req, res) => {
             errors: errors.array() 
         });
     }
-    const { amount, userId, cardId } = req.body;
+    const { amount, UserId, cardId } = req.body;
     const payload = {
         amount: amount,
         card_id: cardId, //"e9ca13bd-36b4-4691-9ee6-e23d7f2e196c"
@@ -381,9 +373,9 @@ const freeze_card = catchAsync(async (req, res) => {
     }
     const { cardId, status } = req.body;
 
-    const card = await model.Card.findOne({
+    const card = await model.Cards.findOne({
         where: {
-            userId: req.user,
+            UserId: req.user,
         }
     })
 
@@ -447,11 +439,11 @@ const gift_card = catchAsync(async (req, res) => {
         });
     }
     
-    const { id: userId } = req.user;
+    const { id: UserId } = req.user;
     const { cardtype, amount, wallet_email} = req.body;
 
     // Find the sender by id
-    const sender = await findUserById(userId)
+    const sender = await findUserById(UserId)
     if(!sender){
         console.log('No User Found')
         return res.json({
@@ -469,7 +461,7 @@ const gift_card = catchAsync(async (req, res) => {
     }
 
     // Get User balance 
-    const accountDetails = await getUserBalance(userId);
+    const accountDetails = await getUserBalance(UserId);
     const { balance } = accountDetails.dataValues;
     console.log(balance);
 
@@ -498,7 +490,7 @@ const gift_card = catchAsync(async (req, res) => {
         },
         {
             where: {
-                userId,
+                UserId,
             },
         }
     );
@@ -522,7 +514,7 @@ const accept_gift_card = catchAsync(async (req, res) => {
     }
 
     const activationLink = req.params.link;
-    const check = await model.GiftCard.findOne({
+    const check = await model.GiftCards.findOne({
         where:{
             acceptLink: activationLink,
         }
@@ -569,7 +561,7 @@ const accept_gift_card = catchAsync(async (req, res) => {
         gender,
     } = req.body;
 
-    const { id: userId } = req.user;
+    const { id: UserId } = req.user;
 
     const data = /* JSON.stringify */(
         {
@@ -594,7 +586,7 @@ const accept_gift_card = catchAsync(async (req, res) => {
     )
 
     // Find the user by id
-    const user = await findUserById(userId)
+    const user = await findUserById(UserId)
     if(!user){
         console.log('No User Found')
         return res.json({
@@ -604,10 +596,10 @@ const accept_gift_card = catchAsync(async (req, res) => {
 
     
     //Gift Card
-    const response = await createCard(data, newcardtype, userId);
+    const response = await createCard(data, newcardtype, UserId);
     const status = COMPLETED
     // Update GiftCard table to accepted
-    await model.GiftCard.update({
+    await model.GiftCards.update({
         accepted:true, 
         expiresIn: null, 
         expired: true,
@@ -675,7 +667,7 @@ const reject_gift_card = catchAsync(async() => {
     //Check from gift card table
     const newcardtype = check.cardType;
     const newAmount = check.amount + fee[newcardtype];
-    const gifterId = check.userId;
+    const gifterId = check.UserId;
     const status = REJECTED;
     const response = await rejectCard(newAmount, gifterId, activationLink, status)
 

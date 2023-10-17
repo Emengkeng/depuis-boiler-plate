@@ -8,19 +8,19 @@ const httpStatus = require("http-status");
 /**
  * Gift a Card 
  * @param {String} cardType
- * @param {String} userId
+ * @param {String} UserId
  * @param {String} recieverName
  * @param {String} gifterId
  * @param {Date} date
  * @returns {Promise<giftCard>}
  */
 
-const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date, cardstatus) => {
+const giftCard = async ( cardType, UserId, amount, recieverName, gifterId, date, cardstatus) => {
     switch (cardType) {
         case BASICC:
             // Check if user is already subscribed to that card
             // and if so, refuse to create duplicate
-            const checkcard = await checkCard(userId);
+            const checkcard = await checkCard(UserId);
 
             if (checkcard.name == 'BASICC') {
                 return res.status(httpStatus.BAD_REQUEST).json({
@@ -31,8 +31,8 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
 
             acceptlink = uuid.v4();
 
-            const cardGiftUpdate = await model.GiftCard.create({
-                recipient: userId,
+            const cardGiftUpdate = await model.GiftCards.create({
+                recipient: UserId,
                 amount: amount,
                 accepted: false,
                 expiresIn: date,
@@ -40,17 +40,17 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
                 cardType: cardType,
                 acceptLink: acceptlink,
                 status: cardstatus,
-                userId: gifterId,
+                UserId: gifterId,
             })
 
-            const sendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+            // const sendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
 
-            return sendEmail;
+            return cardGiftUpdate;
         
         case UNLIMITEDC:
             // Check if user is already subscribed to that card
             // and if so, refuse to create duplicate
-            const ucheckcard = await checkCard(userId);
+            const ucheckcard = await checkCard(UserId);
 
             if (checkcard.name == 'UNLIMITEDC') {
                 return res.status(httpStatus.BAD_REQUEST).json({
@@ -61,8 +61,8 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
 
             acceptlink = uuid.v4();
 
-            const ucardGiftUpdate = await model.GiftCard.creat({
-                recipient: userId,
+            const ucardGiftUpdate = await model.GiftCards.creat({
+                recipient: UserId,
                 amount: amount,
                 accepted: false,
                 expiresIn: date,
@@ -70,18 +70,18 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
                 cardType: cardType,
                 acceptLink: acceptlink,
                 status: cardstatus,
-                userId: gifterId,
+                UserId: gifterId,
             })
 
-            const usendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+            // const usendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
 
-            return usendEmail;
+            return ucardGiftUpdate;
         
         
         case FAMILYC:
             // Check if user is already subscribed to that card
             // and if so, refuse to create duplicate
-            const fcheckcard = await checkCard(userId);
+            const fcheckcard = await checkCard(UserId);
 
             if (checkcard.name == 'FAMILYC') {
                 return res.status(httpStatus.BAD_REQUEST).json({
@@ -92,8 +92,8 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
 
             acceptlink = uuid.v4();
 
-            const fcardGiftUpdate = await model.GiftCard.creat({
-                recipient: userId,
+            const fcardGiftUpdate = await model.GiftCards.creat({
+                recipient: UserId,
                 amount: amount,
                 accepted: false,
                 expiresIn: date,
@@ -101,18 +101,18 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
                 cardType: cardType,
                 acceptLink: acceptlink,
                 status: cardstatus,
-                userId: gifterId,
+                UserId: gifterId,
             })
 
-            const fsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+            // const fsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
 
-            return fsendEmail;
+            return fcardGiftUpdate;
         
 
         case TRAVELC:
             // Check if user is already subscribed to that card
             // and if so, refuse to create duplicate
-            const tcheckcard = await checkCard(userId);
+            const tcheckcard = await checkCard(UserId);
 
             if (checkcard.name == 'TRAVELC') {
                 return res.status(httpStatus.BAD_REQUEST).json({
@@ -123,8 +123,8 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
 
             acceptlink = uuid.v4();
 
-            const tcardGiftUpdate = await model.GiftCard.creat({
-                recipient: userId,
+            const tcardGiftUpdate = await model.GiftCards.creat({
+                recipient: UserId,
                 amount: amount,
                 accepted: false,
                 expiresIn: date,
@@ -132,18 +132,18 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
                 cardType: cardType,
                 acceptLink: acceptlink,
                 status: cardstatus,
-                userId: gifterId,
+                UserId: gifterId,
             })
 
-            const tsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+            // const tsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
 
-            return tsendEmail;
+            return tcardGiftUpdate;
         
 
         case BUSINESSC:
             // Check if user is already subscribed to that card
             // and if so, refuse to create duplicate
-            const bcheckcard = await checkCard(userId);
+            const bcheckcard = await checkCard(UserId);
 
             if (checkcard.name == 'BUSINESSC') {
                 return res.status(httpStatus.BAD_REQUEST).json({
@@ -154,8 +154,8 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
 
             acceptlink = uuid.v4();
 
-            const bcardGiftUpdate = await model.GiftCard.creat({
-                recipient: userId,
+            const bcardGiftUpdate = await model.GiftCards.creat({
+                recipient: UserId,
                 amount: amount,
                 accepted: false,
                 expiresIn: date,
@@ -163,18 +163,18 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
                 cardType: cardType,
                 acceptLink: acceptlink,
                 status: cardstatus,
-                userId: gifterId,
+                UserId: gifterId,
             })
 
-            const bsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+            // const bsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
 
-            return bsendEmail;
+            return bcardGiftUpdate;
         
 
         case STUDENTC:
             // Check if user is already subscribed to that card
             // and if so, refuse to create duplicate
-            const scheckcard = await checkCard(userId);
+            const scheckcard = await checkCard(UserId);
 
             if (checkcard.name == 'STUDENTC') {
                 return res.status(httpStatus.BAD_REQUEST).json({
@@ -185,8 +185,8 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
 
             acceptlink = uuid.v4();
 
-            const scardGiftUpdate = await model.GiftCard.creat({
-                recipient: userId,
+            const scardGiftUpdate = await model.GiftCards.creat({
+                recipient: UserId,
                 amount: amount,
                 accepted: false,
                 expiresIn: date,
@@ -194,18 +194,18 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
                 cardType: cardType,
                 acceptLink: acceptlink,
                 status: cardstatus,
-                userId: gifterId,
+                UserId: gifterId,
             })
 
-            const ssendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+            // const ssendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
 
-            return ssendEmail;
+            return scardGiftUpdate;
         
 
         case CHARITYC:
             // Check if user is already subscribed to that card
             // and if so, refuse to create duplicate
-            const ccheckcard = await checkCard(userId);
+            const ccheckcard = await checkCard(UserId);
 
             if (checkcard.name == 'CHARITYC') {
                 return res.status(httpStatus.BAD_REQUEST).json({
@@ -216,8 +216,8 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
 
             acceptlink = uuid.v4();
 
-            const ccardGiftUpdate = await model.GiftCard.creat({
-                recipient: userId,
+            const ccardGiftUpdate = await model.GiftCards.creat({
+                recipient: UserId,
                 amount: amount,
                 accepted: false,
                 expiresIn: date,
@@ -225,18 +225,18 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
                 cardType: cardType,
                 acceptLink: acceptlink,
                 status: cardstatus,
-                userId: gifterId,
+                UserId: gifterId,
             })
 
-            const csendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+            // const csendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
 
-            return csendEmail;
+            return ccardGiftUpdate;
         
 
         case EXCLUSIVEC:
             // Check if user is already subscribed to that card
             // and if so, refuse to create duplicate
-            const echeckcard = await checkCard(userId);
+            const echeckcard = await checkCard(UserId);
 
             if (checkcard.name == 'EXCLUSIVEC') {
                 return res.status(httpStatus.BAD_REQUEST).json({
@@ -247,8 +247,8 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
 
             acceptlink = uuid.v4();
 
-            const ecardGiftUpdate = await model.GiftCard.creat({
-                recipient: userId,
+            const ecardGiftUpdate = await model.GiftCards.creat({
+                recipient: UserId,
                 amount: amount,
                 accepted: false,
                 expiresIn: date,
@@ -256,18 +256,18 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
                 cardType: cardType,
                 acceptLink: acceptlink,
                 status: cardstatus,
-                userId: gifterId,
+                UserId: gifterId,
             })
 
-            const esendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+            // const esendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
 
-            return esendEmail;
+            return ecardGiftUpdate;
         
 
         case REWARDC:
             // Check if user is already subscribed to that card
             // and if so, refuse to create duplicate
-            const rcheckcard = await checkCard(userId);
+            const rcheckcard = await checkCard(UserId);
 
             if (checkcard.name == 'REWARD') {
                 return res.status(httpStatus.BAD_REQUEST).json({
@@ -278,8 +278,8 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
 
             acceptlink = uuid.v4();
 
-            const rcardGiftUpdate = await model.GiftCard.creat({
-                recipient: userId,
+            const rcardGiftUpdate = await model.GiftCards.creat({
+                recipient: UserId,
                 amount: amount,
                 accepted: false,
                 expiresIn: date,
@@ -287,18 +287,18 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
                 cardType: cardType,
                 acceptLink: acceptlink,
                 status: cardstatus,
-                userId: gifterId,
+                UserId: gifterId,
             })
 
-            const rsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+            // const rsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
 
-            return rsendEmail;
+            return rcardGiftUpdate;
         
 
         case BUDGETC:
             // Check if user is already subscribed to that card
             // and if so, refuse to create duplicate
-            const bbcheckcard = await checkCard(userId);
+            const bbcheckcard = await checkCard(UserId);
 
             if (checkcard.name == 'BUDGETC') {
                 return res.status(httpStatus.BAD_REQUEST).json({
@@ -309,8 +309,8 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
 
             acceptlink = uuid.v4();
 
-            const bbcardGiftUpdate = await model.GiftCard.creat({
-                recipient: userId,
+            const bbcardGiftUpdate = await model.GiftCards.creat({
+                recipient: UserId,
                 amount: amount,
                 accepted: false,
                 expiresIn: date,
@@ -318,12 +318,12 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
                 cardType: cardType,
                 acceptLink: acceptlink,
                 status: cardstatus,
-                userId: gifterId,
+                UserId: gifterId,
             })
 
-            const bbsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
+            //const bbsendEmail = await sendMail.giftCard(user.email, `${process.env.APP_URL}/card/accept/${acceptlink}`, recieverName);
 
-            return bbsendEmail;
+            return bbcardGiftUpdate;
         
     
         default:
@@ -333,7 +333,7 @@ const giftCard = async ( cardType, userId, amount, recieverName, gifterId, date,
 
 const rejectCard = async(amount, gifterId, activationLink, cardstatus) => {
 
-    const check = await model.GiftCard.update({
+    const check = await model.GiftCards.update({
         accepted: false,
         expiresIn: null,
         expired: true,

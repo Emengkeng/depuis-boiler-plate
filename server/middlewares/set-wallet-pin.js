@@ -7,7 +7,7 @@ const setWalletPin = async (req, res, next) => {
   try {
     const user = req.user;
 
-    const wallet = await model.Wallet.findOne({
+    const wallet = await model.Wallets.findOne({
       where: {
         userId: user.id
       }

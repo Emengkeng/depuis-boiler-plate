@@ -10,7 +10,7 @@ const bcrypt = require('bcryptjs');
 
 const createUser = async(userData) => {
 
-    const {first_name, last_name, email, password } = userData
+    const {first_name, last_name, email, password, gender, nationality, phone} = userData
 
     const hashPassword = await bcrypt.hashSync(password, 10)
 
@@ -19,9 +19,35 @@ const createUser = async(userData) => {
         last_name: last_name,
         email: email,
         password: hashPassword,
+        gender: gender,
+        nationality: nationality,
+        phone: phone,
     })
     //const user = await db('users').insert( {first_name, last_name, email, password: hashPassword })
     return user
+}
+
+/**
+ * Create profile For a User
+ * @param {Object} data
+ * @returns {Promise<Profile>}
+ */
+
+const createProfile = async(UserId, firstName) => {
+    const user = await model.Users.findOne({
+        where: {
+            id: UserId,
+        }
+    })
+
+    const profilepic = process.env.DEFAULTPROFILEPICLINK
+    const profile = await model.Profiles.create({
+        image: profilepic,
+        userName: firstName,
+        UserId: user.id,
+    })
+
+    return profile;
 }
 
 /**
@@ -58,13 +84,13 @@ const findUserById = async(id) => {
 
 /**
  * Get User balance 
- * @param {String} userId
+ * @param {String} UserId
  * @returns {Promise<Accounts>}
  */
 
-const getUserBalance = async(userId) => {
+const getUserBalance = async(UserId) => {
     const accountDetails = await model.Accounts.findOne({
-        where: { userId: userId },
+        where: { UserId: UserId },
     });
 
     return accountDetails;
@@ -77,7 +103,7 @@ const getUserBalance = async(userId) => {
  * @returns {Promise<Wallet>}
  */
 const findWalletByWalletC = async(wallet_code) => {
-    const user = await model.Wallet.findOne({
+    const user = await model.Wallets.findOne({
         where: {
             wallet_code: wallet_code,
         }
@@ -94,13 +120,17 @@ const findWalletByWalletC = async(wallet_code) => {
 //TODO
 // Need to use the Profile model here
  const getProfile = async(userData) => {
-    const user = await findUserByEmail(userData.email)
-    delete user.password
+    const user = await model.Profiles.findOne({
+        where: {
+            UserId: userData.id,
+        }
+    });
+    
     return user
 }
 
-const giveBackUserMoney = async(userId, amount) => {
-    const accountDetails = await getUserBalance(userId);
+const giveBackUserMoney = async(UserId, amount) => {
+    const accountDetails = await getUserBalance(UserId);
     const { balance } = accountDetails.dataValues;
     console.log(balance);
 
@@ -112,17 +142,17 @@ const giveBackUserMoney = async(userId, amount) => {
         balance: newAmount,
     },{
         where: {
-            userId: userId,
+            UserId: UserId,
         }
     });
     
     return update;
 }
 
-const checkCard = async(userId) => {
-    const checkCard = await model.CardType.findOne({
+const checkCard = async(UserId) => {
+    const checkCard = await model.CardTypes.findOne({
         where: {
-            userId: userId,
+            UserId: UserId,
         },
     });
 
@@ -138,4 +168,5 @@ module.exports = {
     getUserBalance,
     giveBackUserMoney,
     checkCard,
+    createProfile,
 };

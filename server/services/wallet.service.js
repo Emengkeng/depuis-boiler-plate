@@ -12,18 +12,18 @@ const BadRequestError = require("../utils/errors/badrequest.error");
 
 /**
  * Create Wallet
- * @param {Integer} userID
+ * @param {Integer} UserId
  * @returns {Promise<Wallet>}
  */
 
-const createWallet = async (userID) => {
+const createWallet = async (UserId) => {
   const user = await model.Users.findOne({
     where: {
-      id: userID,
+      id: UserId,
     }
   })
 
-  //const user = await db.select("*").from("users").where("id", userID).first();
+  //const user = await db.select("*").from("users").where("id", UserId).first();
 
   const generatedWalletCode = randomstring.generate({
     length: 7,
@@ -31,9 +31,9 @@ const createWallet = async (userID) => {
     capitalization: "uppercase",
   });
 
-  const wallet = await model.Wallet.create({
-    userId: user.id,
+  const wallet = await model.Wallets.create({
     wallet_code: generatedWalletCode,
+    UserId: user.id,
   })
 /*   const wallet = await db("wallets").insert({
     user_id: user.id,
@@ -54,19 +54,19 @@ const setWalletPin = async (walletData) => {
 
   const hashPin = await bcrypt.hashSync(pin, 10);
 
-  const wallet = await model.Wallet.findOne({
+  const wallet = await model.Wallets.findOne({
     where: {
-      userId: user.id
+      UserId: user.id
     }
   })
   if (!wallet.wallet_pin){
-    await model.Wallet.update(
+    await model.Wallets.update(
       {
         wallet_pin: hashPin,
       },
       {
         where: {
-          userId: user.id,
+          UserId: user.id,
         },
       },
     );
@@ -120,10 +120,10 @@ const verifyWalletFunding = async (walletData) => {
   }
 
   // Make sure to not put duplicate data
-  await model.Transaction(async (trx) => {
+  await model.Transactions(async (trx) => {
     const transaction = await trx.findOne({
       where: {
-        userId: user.id,
+        UserId: user.id,
         transaction_code: payment.id,
       }
     })
@@ -131,14 +131,14 @@ const verifyWalletFunding = async (walletData) => {
 
     //Update User balance
     if (!transaction) {
-      await model.Wallet.increment(
+      await model.Wallets.increment(
         'balance',
         {
           by: payment.amount,
         },
         {
           where: {
-            userId: user.id
+            UserId: user.id
           },
         }
       )
@@ -146,7 +146,7 @@ const verifyWalletFunding = async (walletData) => {
 
       // Create new transaction
       await trx.create({
-        userId: user.id,
+        UserId: user.id,
         transaction_code: payment.id,
         transaction_reference: payment.tx_ref,
         amount: payment.amount,
@@ -181,7 +181,7 @@ const transferFund = async (walletData) => {
     const recipientWallet = await findWalletByWalletC(walletCodeOrEmail)
     //const recipientWallet = await db("wallets").where("wallet_code", walletCodeOrEmail).first();
 
-    const recipientID = recipientWallet?.userId || null;
+    const recipientID = recipientWallet?.UserId || null;
     
     recipient = await findUserById(recipientID)
     //recipient = await db("users").where("id", recipientID).first();
@@ -195,9 +195,9 @@ const transferFund = async (walletData) => {
     throw new BadRequestError("You cannot transfer fund to yourself");
   }
 
-  const senderWallet = await model.Wallet.findOne({
+  const senderWallet = await model.Wallets.findOne({
     where: {
-      userId: sender.id,
+      UserId: sender.id,
     }
   })
   //const senderWallet = await db("wallets").where("user_id", sender.id).first();
@@ -230,14 +230,14 @@ const transferFund = async (walletData) => {
 
   await transaction(async () => {
     // Deduct from sender wallet
-    await model.Wallet.decrement(
+    await model.Wallets.decrement(
       'balance',
       {
         by: amount,
       },
       {
         where: {
-          userId: sender.id
+          UserId: sender.id
         }
       }
     );
@@ -245,8 +245,8 @@ const transferFund = async (walletData) => {
 
 
     // save the transaction
-    await model.Transaction.create({
-      userId: sender.id,
+    await model.Transactions.create({
+      UserId: sender.id,
       transaction_code: generatedTransactionCode,
       transaction_reference: `PID-${generatedTransactionReference}`,
       amount: amount,
@@ -258,14 +258,14 @@ const transferFund = async (walletData) => {
     );
 
     // Add to recipient wallet
-    await model.Wallet.increment(
+    await model.Wallets.increment(
       'balance',
       {
         by: amount
       },
       {
         where: {
-          userId: recipient.id,
+          UserId: recipient.id,
         },
       }
       
@@ -274,8 +274,8 @@ const transferFund = async (walletData) => {
 
 
     // save the transaction
-    await model.Transaction.create({
-      userId: recipient.id,
+    await model.Transactions.create({
+      UserId: recipient.id,
       transaction_code: generatedTransactionCode,
       transaction_reference: `PID-${generatedTransactionReference}`,
       amount: amount,
@@ -300,9 +300,9 @@ const withdrawFund = async (walletData) => {
   const amount = walletData.amount;
   const walletPin = walletData.wallet_pin;
 
-  const userWallet = await model.Wallet.findOne({
+  const userWallet = await model.Wallets.findOne({
     where: {
-      userId: user.id,
+      UserId: user.id,
     }
   })
   //const userWallet = await db("wallets").where("user_id", user.id).first();
@@ -324,22 +324,22 @@ const withdrawFund = async (walletData) => {
 
   await transaction(async () => {
     // Deduct from user wallet
-    await model.Wallet.decrement(
+    await model.Wallets.decrement(
       'balance',
       {
         by:amountToDeduct,
       },
       {
         where: {
-          userId: user.id
+          UserId: user.id
         }
       }
     )
     //await trx("wallets").where("user_id", user.id).decrement("balance", amountToDeduct);
 
     // save the transaction for the amount withdrew
-    await model.Transaction.create({
-      userId: user.id,
+    await model.Transactions.create({
+      UserId: user.id,
       transaction_code: payment.id,
       transaction_reference: payment.reference,
       amount: payment.amount,
@@ -350,8 +350,8 @@ const withdrawFund = async (walletData) => {
     });
 
     // save the transaction for the fee of amount withdrew
-    await model.Transaction.create({
-      userId: user.id,
+    await model.Transactions.create({
+      UserId: user.id,
       transaction_code: payment.id,
       transaction_reference: payment.reference,
       amount: payment.fee,
@@ -371,9 +371,9 @@ const withdrawFund = async (walletData) => {
 
 const getWalletBalance = async (walletData) => {
   const user = walletData.user;
-  const wallet = await model.Wallet.findOne({
+  const wallet = await model.Wallets.findOne({
     where: {
-      userId: user.id,
+      UserId: user.id,
     }
   })
   //const wallet = await db("wallets").where("user_id", user.id).first();
