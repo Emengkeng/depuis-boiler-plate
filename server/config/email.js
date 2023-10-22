@@ -12,7 +12,7 @@ let user;
 let pass;
 
 if (process.env.NODE_ENV !== 'production') {
-  host = 'live.smtp.mailtrap.io';
+  host = 'sandbox.smtp.mailtrap.io';
   port = 587;
   user = process.env.MAIL_TRAP_USERNAME;
   pass = process.env.MAIL_TRAP_PASSWORD;

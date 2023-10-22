@@ -1,17 +1,22 @@
 # Depuis - Nodejs Boiler Plate 🌟
 
-[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Emengkeng/depuis-boiler-plate?logo=github&style=for-the-badge)](https://github.com/Emengkeng/depuis-boiler-plate/) 
-[![GitHub last commit](https://img.shields.io/github/last-commit/Emengkeng/depuis-boiler-plate?style=for-the-badge&logo=git)](https://github.com/Emengkeng/depuis-boiler-plate/) 
-[![GitHub stars](https://img.shields.io/github/stars/Emengkeng/depuis-boiler-plate?style=for-the-badge)](https://github.com/Emengkeng/depuis-boiler-plate/stargazers) 
-[![My stars](https://img.shields.io/github/stars/Emengkeng?affiliations=OWNER%2CCOLLABORATOR&style=for-the-badge&label=My%20stars)](https://github.com/Emengkeng/depuis-boiler-plate/stargazers) 
-[![GitHub forks](https://img.shields.io/github/forks/Emengkeng/depuis-boiler-plate?style=for-the-badge&logo=git)](https://github.com/Emengkeng/depuis-boiler-plate/network)
-[![Code size](https://img.shields.io/github/languages/code-size/Emengkeng/depuis-boiler-plate?style=for-the-badge)](https://github.com/Emengkeng/depuis-boiler-plate)
-[![Languages](https://img.shields.io/github/languages/count/Emengkeng/depuis-boiler-plate?style=for-the-badge)](https://github.com/Emengkeng/depuis-boiler-plate)
-[![Top](https://img.shields.io/github/languages/top/Emengkeng/depuis-boiler-plate?style=for-the-badge&label=Top%20Languages)](https://github.com/Emengkeng/depuis-boiler-plate)
-[![Issues](https://img.shields.io/github/issues/Emengkeng/depuis-boiler-plate?style=for-the-badge&label=Issues)](https://github.com/Emengkeng/depuis-boiler-plate)
-[![Watchers](	https://img.shields.io/github/watchers/Emengkeng/depuis-boiler-plate?label=Watch&style=for-the-badge)](https://github.com/Emengkeng/depuis-boiler-plate) 
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+<!-- [![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![Code Size][gitHub-code-size-in-bytes]][gitHub-url] -->
 
-Nodejs Boiler Plate
+
+Awesome Nodejs Boiler Plate with Basic Authentication (Register, Login, Reset Password, Forget Password)
 
 
 # Features
@@ -137,7 +142,7 @@ This endpoint does the following
 - This endpoint return all registered users 
 ## Need help?
 
-Feel free to contact me on [LinkedIn](https://www.linkedin.com/in/jussec/) 
+Feel free to contact me on [![LinkedIn][linkedin-shield]][linkedin-url]
 
  [![Twitter](https://img.shields.io/badge/Twitter-follow-blue.svg?logo=twitter&logoColor=white)](https://twitter.com/OxJussec)
 
@@ -152,3 +157,23 @@ if (youEnjoyed) {
 ```
 
 -----------
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/Emengkeng/depuis-boiler-plate.svg?style=for-the-badge
+[contributors-url]: https://github.com/Emengkeng/depuis-boiler-plate/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/Emengkeng/depuis-boiler-plate.svg?style=for-the-badge
+[forks-url]: https://github.com/Emengkeng/depuis-boiler-plate/network/members
+[stars-shield]: https://img.shields.io/github/stars/Emengkeng/depuis-boiler-plate.svg?style=for-the-badge
+[stars-url]: https://github.com/Emengkeng/depuis-boiler-plate/stargazers
+[issues-shield]: https://img.shields.io/github/issues/Emengkeng/depuis-boiler-plate.svg?style=for-the-badge
+[issues-url]: https://github.com/Emengkeng/depuis-boiler-plate/issues
+[license-shield]: https://img.shields.io/github/license/Emengkeng/depuis-boiler-plate.svg?style=for-the-badge
+[license-url]: https://github.com/Emengkeng/depuis-boiler-plate/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/jussec
+[gitHub-code-size-in-bytes]: https://img.shields.io/github/languages/code-size/Emengkeng/depuis-boiler-plate.svg?logo=github&style=for-the-badge
+[gitHub-url]: https://github.com/Emengkeng/depuis-boiler-plate
+[gitHub-last-commit]: https://img.shields.io/github/last-commit/Emengkeng/depuis-boiler-plate.svg?style=for-the-badge&logo=git
+[gitHub last commit url]: 
