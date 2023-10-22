@@ -8,6 +8,7 @@ jspm_packages/
 
 # Logs
 logs
+READMEg.md
 sequalize_command.txt
 logs.txt
 *.log

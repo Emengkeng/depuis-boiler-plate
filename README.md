@@ -1,81 +1,37 @@
-# Best E-wallet-virtual-card-system
-This system allow users to fund their account, transfer funds and withdraw from their account, and also subscribe to Real virtual credit card
+# Depuis - Nodejs Boiler Plate 🌟
 
-# Note
-Application is still under developement, new features may be added weekly 
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Emengkeng/depuis-boiler-plate?logo=github&style=for-the-badge)](https://github.com/Emengkeng/depuis-boiler-plate/) 
+[![GitHub last commit](https://img.shields.io/github/last-commit/Emengkeng/depuis-boiler-plate?style=for-the-badge&logo=git)](https://github.com/Emengkeng/depuis-boiler-plate/) 
+[![GitHub stars](https://img.shields.io/github/stars/Emengkeng/depuis-boiler-plate?style=for-the-badge)](https://github.com/Emengkeng/depuis-boiler-plate/stargazers) 
+[![My stars](https://img.shields.io/github/stars/Emengkeng?affiliations=OWNER%2CCOLLABORATOR&style=for-the-badge&label=My%20stars)](https://github.com/Emengkeng/depuis-boiler-plate/stargazers) 
+[![GitHub forks](https://img.shields.io/github/forks/Emengkeng/depuis-boiler-plate?style=for-the-badge&logo=git)](https://github.com/Emengkeng/depuis-boiler-plate/network)
+[![Code size](https://img.shields.io/github/languages/code-size/Emengkeng/depuis-boiler-plate?style=for-the-badge)](https://github.com/Emengkeng/depuis-boiler-plate)
+[![Languages](https://img.shields.io/github/languages/count/Emengkeng/depuis-boiler-plate?style=for-the-badge)](https://github.com/Emengkeng/depuis-boiler-plate)
+[![Top](https://img.shields.io/github/languages/top/Emengkeng/depuis-boiler-plate?style=for-the-badge&label=Top%20Languages)](https://github.com/Emengkeng/depuis-boiler-plate)
+[![Issues](https://img.shields.io/github/issues/Emengkeng/depuis-boiler-plate?style=for-the-badge&label=Issues)](https://github.com/Emengkeng/depuis-boiler-plate)
+[![Watchers](	https://img.shields.io/github/watchers/Emengkeng/depuis-boiler-plate?label=Watch&style=for-the-badge)](https://github.com/Emengkeng/depuis-boiler-plate) 
+
+Nodejs Boiler Plate
+
 
 # Features
-- Basic Authentication (Register & Login)
+- Basic Authentication (Register, Login, Reset Password, Forget Password)
 - Get Profile
-- Set Wallet Pin
-- Fund Wallet
-- Verify Wallet Funding
-- Fund Transfer
-- Withdraw Fund
-- Get Transactions
-- Create to card
-- Freeze card
-- Fund Card
-- Get Card Transactions
-- Withdraw from card
 
-# Tech Stack
+## Tech stack
 - javascript
 - nodejs
 - mysql
 - express
 
-# API End Points
-## Users
-### Register
-```
-{BaseUrl}/api/v1/register
-```
-This endpoint does the followings:
 
-- Create a user
-- Sends Verification To the New User
-
-### Login
-```
-{BaseUrl}/api/v1/login
-```
-This endpoint does the following
-- Check if the user details is valid
-- Generate a JWT token if the user details are valid
-
-### Get Profile
-```
-{BaseUrl}/api/v1/auth/profile
-```
-- This endpoint return the profile of the authenticated user.
-
-### All Users
-```
-{BaseUrl}/api/v1/getallusers
-```
-- This endpoint return all registered users 
-
-
-# How to install
+## Instructions
 
 ## Using Git (recommended)
-1. Clone the project from github.
-
-```
-git clone https://github.com/Emengkeng/virtual-card-and-e-wallet.git
-```
-git remote add origin https://github.com/Emengkeng/virtual-card-and-e-wallet.git
-## Using manual download ZIP
-
-1. Download repository
-2. Uncompress to your desired directory
-
-## Install npm dependencies
-
-```
-npm install
-```
+1. `git clone https://github.com/Emengkeng/depuis-boiler-plate.git` 
+2. `cd depuis-boiler-plate`
+3. Install node dependencies 
+   - `npm install`
 
 ## Setting up environments
 1. You will find a file named `.env.example` on root directory of project.
@@ -106,7 +62,7 @@ sh dev-sript.sh
 ```
 You will know server is running by checking the output of the command `npm start`
 
-## Running API server on The Web
+## Running API server Live
 ```sh
 sh production-sript.sh
 ```
@@ -118,8 +74,81 @@ npm test
 ```
 **Note:** Make sure you set up the test variable in the `.env` file
 
-# Author
-Emenkeng Juslen
 
-# License
-MIT
+
+# API End Points
+## Users
+### Register
+```
+{BaseUrl}/api/v1/register
+```
+This endpoint does the followings:
+
+- Create a user
+- Sends Verification To the New User
+
+### Login
+```
+{BaseUrl}/api/v1/login
+```
+This endpoint does the following
+- Check if the user details is valid
+- Generate a JWT token if the user details are valid
+
+### Forget Password
+```
+{BaseUrl/api/v1/forgetpassword}
+```
+This endpoint does the following
+- Takes Email and Send and Send a reset link to change password
+
+### Reset Passoword 
+```
+{BaseUrl}/api/v1/resetpassword
+```
+This endpoint does the following
+- Creates a new Password for user
+
+### Change Password
+```
+{BaseUrl}/api/v1/changepassword
+```
+This endpoint does the following
+- Takes a new password and Replace the old one
+
+### Confirm Email
+```
+{BaseUrl}/api/v1/confirmemail
+```
+This endpoint does the following
+- Confirm the email of the user
+
+
+### Get Profile
+```
+{BaseUrl}/api/v1/auth/profile
+```
+- This endpoint return the profile of the authenticated user.
+
+### All Users
+```
+{BaseUrl}/api/v1/getallusers
+```
+- This endpoint return all registered users 
+## Need help?
+
+Feel free to contact me on [LinkedIn](https://www.linkedin.com/in/jussec/) 
+
+ [![Twitter](https://img.shields.io/badge/Twitter-follow-blue.svg?logo=twitter&logoColor=white)](https://twitter.com/OxJussec)
+
+---------
+
+```javascript
+
+if (youEnjoyed) {
+    starThisRepository();
+}
+
+```
+
+-----------

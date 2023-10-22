@@ -1,7 +1,7 @@
 {
-  "name": "vcard_wallet",
+  "name": "Depuis",
   "version": "1.0.0",
-  "description": "This system allow users to fund their account, transfer funds and withdraw from their account, and also subscribe to virtual credit card",
+  "description": "Awesome Node js Boiler Plates To get Your Application Runing ",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon --exec babel-node ./server/app.js",
@@ -17,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Emengkeng/e-wallet-system.git"
+    "url": "git+https://github.com/Emengkeng/depuis-boiler-plate.git"
   },
   "author": "emengkeng juslen",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Emengkeng/e-wallet-system/issues"
+    "url": "https://github.com/Emengkeng/depuis-boiler-plateissues"
   },
-  "homepage": "https://github.com/Emengkeng/e-wallet-system#readme",
+  "homepage": "https://github.com/Emengkeng/depuis-boiler-plate#readme",
   "dependencies": {
     "@babel/core": "^7.23.0",
     "@babel/node": "^7.22.19",
@@ -32,6 +32,9 @@
     "axios": "^1.5.0",
     "bcryptjs": "^2.4.3",
     "chai": "^4.3.8",
+    "email-templates": "^8.0.8",
+    "hbs": "^4.1.2",
+    "sib-api-v3-sdk": "^8.2.0",
     "chai-http": "^4.4.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
