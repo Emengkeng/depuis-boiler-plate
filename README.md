@@ -25,10 +25,6 @@ Application is still under developement, new features may be added weekly
 - mysql
 - express
 
-# Todo
-[ ] Switch from using axios in the deposit and withdrawal, to using flutterwave rave package
-
-[ ] 
 # API End Points
 ## Users
 ### Register
@@ -38,14 +34,13 @@ Application is still under developement, new features may be added weekly
 This endpoint does the followings:
 
 - Create a user
-- Create a wallet for the user
-
+- Sends Verification To the New User
 
 ### Login
 ```
 {BaseUrl}/api/v1/login
 ```
-This endpoint does the followings
+This endpoint does the following
 - Check if the user details is valid
 - Generate a JWT token if the user details are valid
 
@@ -61,120 +56,6 @@ This endpoint does the followings
 ```
 - This endpoint return all registered users 
 
-## Wallet
-### Set Wallet Pin
-```
-{BaseUrl}/api/v1/wallet/set-pin
-```
-- Set wallet pin for the user because by default the wallet created during registration is null
-
-### Fund Wallet
-```
-{BaseUrl}/api/v1/wallet/fund
-```
-- Takes amount and generate payment link
-
-### Verify Wallet funding 
-```
-{BaseUrl}/api/v1/wallet/verify
-```
-- Takes Payment Link and verifies it
-
-### Transfer Money 
-```
-{BaseUrl}/api/v1/wallet/transfer
-```
-- Transfers money from one account to another 
-
-### Withdraw money
-```
-{BaseUrl}/api/v1/wallet/withdraw
-```
-- Checks account balance and Withdraw money from users account
-
-
-### Get Wallet Balance
-```
-{BaseUrl}/api/v1/wallet/balance
-```
-- Get users account balance
-
-### Banks
-```
-{BaseUrl}/api/v1/wallet/banks
-```
-- Get all available banks used by flutterwave
-
-## Transaction 
-### Get Wallet Transactions
-```
-{BaseUrl}/api/v1/transactions
-```
-- Get Users transactions 
-
-## Card
-### List Cards
-```
-{BaseUrl}/api/v1/card/listcard
-```
-- List all Cards that have been created since the existence of the plartform
-
-### Create Card
-```
-{BaseUrl}/api/v1/card/createcard
-```
-- Create a card for a user, depending on the card type
-
-### Fund Card
-```
-{BaseUrl}/api/v1/card/fundcard
-```
-- Takes amount and funds a card
-
-### Pay
-```
-{BaseUrl}/api/v1/card/pay
-```
-- End point to test if a card works by initiating payment with it
-
-### Get Card
-```
-{BaseUrl}/api/v1/card/getcard
-```
-- Takes card id and return all info about that card 
-
-### Fetch Transaction of a card 
-```
-{BaseUrl}/api/v1/card/fetch_transcard
-```
-- Fetch transactions of a card from the flutterwave server
-- We will add a card transaction table on our db to handle this soon
-
-
-### Withdraw 
-```
-{BaseUrl}/api/v1/card/withdraw
-```
-- Withdraw money from card
-
-
-### Freeze Card
-```
-{BaseUrl}/api/v1/card/freezecard
-```
-- Takes card id and Freeze the card
-
-### Gift Card
-```
-{BaseUrl}/api/v1/card/giftcard
-```
-- Gift a card to a user on the plartform 
-
-### Accept a Gifted Card
-```
-{BaseUrl}/api/v1/card/acceptcard
-```
-- Accept card that has been gifted to you
 
 # How to install
 

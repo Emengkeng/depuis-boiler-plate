@@ -49,6 +49,14 @@ module.exports = {
         defaultValue: false,
         allowNull: false,
       },
+      activationLink: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      resetLink: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       role: {
         type: Sequelize.ENUM({
           values: ['ADMIN', 'USER', 'AMBASADOR', 'SUPERADMIN', 'BONUS']

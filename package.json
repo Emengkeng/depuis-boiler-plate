@@ -41,7 +41,6 @@
     "express": "^4.18.2",
     "express-validation": "^4.1.0",
     "express-validator": "^7.0.1",
-    "flutterwave-node": "^1.2.2",
     "helmet": "^7.0.0",
     "http-status": "^1.7.0",
     "istanbul": "^0.4.5",

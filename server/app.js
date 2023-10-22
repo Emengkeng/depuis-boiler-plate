@@ -6,7 +6,6 @@ const cors = require("cors");
 const routes = require("./routes");
 const errorHandler = require("./middlewares/error-handler");
 const NotFoundError = require("./utils/errors/notfound.error");
-import { func } from 'joi';
 import db from './models';
 require("dotenv/config");
 
