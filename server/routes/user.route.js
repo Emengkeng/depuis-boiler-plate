@@ -12,6 +12,7 @@ const forgetPassword = require("../controllers/password/forgetPassword.controlle
 const { userValidation } = require("../validations");
 const { authAdmin } = require("../middlewares/auth-admin");
 const {auth} = require("../middlewares/auth");
+const {sendEmail} = require("../utils/emailTest")
 
 const router = express.Router();
 
@@ -21,7 +22,8 @@ router.post("/forgetpassword", forgetPassword);
 router.post("/resetpassword", resetPassword);
 router.post("/changepassword", changePassword);
 router.post("/confirmemail", confirmAccount);
+router.get("/send-email", sendEmail);
 router.get("/auth/profile", [auth], getProfile);
-router.get("/getallusers", [auth, authAdmin], getAllusers);
+router.get("/getallusers",  getAllusers);
 
 module.exports = router;

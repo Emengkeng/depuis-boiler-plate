@@ -103,7 +103,7 @@ const getProfile = catchAsync(async (req, res) => {
 
 const getAllusers = catchAsync(async (req, res) => {
   const data = await model.Users.findAll({
-    include: [model.Wallets], //, model.Profiles, model.Cards, model.CardTypes
+  /*   include: [model.Wallets], */ //, model.Profiles, model.Cards, model.CardTypes
   });
   return res.status(httpStatus.OK).send({
     success: true,

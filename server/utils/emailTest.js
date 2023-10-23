@@ -6,9 +6,10 @@ import nodemailer from 'nodemailer';
 */
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.mailtrap.io',
+  host: 'sandbox.smtp.mailtrap.io',
   //host: 'localhost',
-  port: 465,
+  port: 2525,
+  //secureConnection: false,
   auth: {
     user: process.env.MAIL_TRAP_USERNAME,
     pass: process.env.MAIL_TRAP_PASSWORD
