@@ -51,7 +51,7 @@ module.exports = {
       },
       activationLink: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       resetLink: {
         type: Sequelize.STRING,
@@ -59,9 +59,9 @@ module.exports = {
       },
       role: {
         type: Sequelize.ENUM({
-          values: ['ADMIN', 'USER', 'AMBASADOR', 'SUPERADMIN', 'BONUS']
+          values: ['admin', 'user', 'superadmin']
         }),
-        defaultValue: 'USER',
+        defaultValue: 'user',
       },
       createdAt: {
         allowNull: false,

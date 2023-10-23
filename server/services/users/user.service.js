@@ -31,7 +31,7 @@ const createUser = async(userData) => {
     })
 
     const confirmEmailUrl = `
-    ${process.env.PRODUCT_URL}/confirm_key=${activationLink}
+    ${process.env.PRODUCT_URL}/api/v1/confirmemail/confirm_key=${activationLink}
     `
     //send verification email
     let template = 'verify email';
@@ -46,14 +46,14 @@ const createUser = async(userData) => {
  * @returns {Promise<user>}
  */
 
-const verifyEmail = async (activationLink) => {
+const verifyEmail = async (confirm_key) => {
     const user = await model.Users.update(
         {
-            isActivated: true,
+            isActivated: true
         },
         {
             where: {
-                activationLink: activationLink,
+                activationLink: confirm_key,
             }
         }
     );

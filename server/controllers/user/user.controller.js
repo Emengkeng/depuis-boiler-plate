@@ -3,6 +3,7 @@ const httpStatus = require("http-status");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 import model from '../../models';
+import {sendEmail} from '../../config/email'
 const jwt = require("jsonwebtoken");
 const jwtConfig = require("../../config/jwt");
 const catchAsync = require("../../utils/catchasync");
@@ -69,15 +70,16 @@ const confirmAccount = catchAsync(async(req, res) => {
   if (!errors.isEmpty()) {
     return res.status(httpStatus.BAD_REQUEST).json({ success: false, errors: errors.array() });
   }
-  const { confirm_key } = req.body.confirm_key;
+  const { confirm_key } = req.body;
 
   const result = await userService.verifyEmail(confirm_key);
   let username = result.first_name;
   let email = result.email;
 
+    //TO Do
   //save contact to email marketing and sales crm
-  let FIRSTNAME = username.split(' ')[0];
-  await userContact.CreateContact(email, FIRSTNAME);
+  let FIRSTNAME = username;
+  //await userContact.CreateContact(email, FIRSTNAME);
 
   //send welcome email
   let template = 'welcome';

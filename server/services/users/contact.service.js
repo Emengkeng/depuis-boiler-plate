@@ -1,7 +1,7 @@
-import { SibContactsApi } from '../../config/sendinblue.js'
+import {SibContactsApi, createContact} from '../../config/sendinblue.js'
 // Save signed up user's email to sendinblue
-// called in createUser in services/users/user.service.js verifyUser()
-export const CreateContact = async (email, FIRSTNAME) => {
+// called in createUser in services/users/user.service.js verifyEmail()
+const CreateContact = async (email, FIRSTNAME) => {
     const listId = parseInt(process.env.SendInBlue_ListId);
 
     const contact = {
@@ -17,7 +17,7 @@ export const CreateContact = async (email, FIRSTNAME) => {
 
 //update sib email when user updates account email
 //called in Services/auth/authentication.js updateEmail()
-export const UpdateContact = async (email, oldEmail) => {
+const UpdateContact = async (email, oldEmail) => {
     const updateContact = {
         attributes: {
         Email: email
@@ -27,3 +27,8 @@ export const UpdateContact = async (email, oldEmail) => {
     await SibContactsApi.updateContact(oldEmail, updateContact).catch((err) => console.log(err));
     return;
 };
+
+module.exports = {
+    CreateContact,
+    UpdateContact,
+}
