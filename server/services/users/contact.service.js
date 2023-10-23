@@ -1,5 +1,4 @@
-import { SibContactsApi } from '../../Config/sendinblue.js';
-
+import { SibContactsApi } from '../../config/sendinblue.js'
 // Save signed up user's email to sendinblue
 // called in createUser in services/users/user.service.js verifyUser()
 export const CreateContact = async (email, FIRSTNAME) => {

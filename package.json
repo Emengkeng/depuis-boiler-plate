@@ -33,6 +33,7 @@
     "bcryptjs": "^2.4.3",
     "chai": "^4.3.8",
     "chai-http": "^4.4.0",
+    "cli": "^1.0.1",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -58,7 +59,8 @@
     "url-parse": "^1.5.10",
     "uuid": "^9.0.1",
     "validator": "^13.11.0",
-    "xss-clean": "^0.1.4"
+    "xss-clean": "^0.1.4",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.22.0",

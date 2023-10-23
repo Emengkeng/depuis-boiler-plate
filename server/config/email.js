@@ -22,7 +22,7 @@ if (process.env.NODE_ENV !== 'production') {
   // user = process.env.MAIL_TRAP_USERNAME;
   // pass = process.env.MAIL_TRAP_PASSWORD;
   // TODO: Change this to sendinblue in later stage
-  host = 'smtp-relay.sendinblue.com';
+  host = 'smtp-relay.brevo.com';
   port = 587;
   user = process.env.SendInBlue_User;
   pass = process.env.SendInBlue_Password;

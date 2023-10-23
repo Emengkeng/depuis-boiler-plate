@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import transporter from '../../middlewares/transporter';
 import model from '../../models';
 const catchAsync = require("../../utils/catchasync");
 import {sendEmail} from '../../config/email';
@@ -42,4 +41,4 @@ const forgetPassword = catchAsync(async (req, res) => {
   });
 });
 
-module.exports ={ forgetPassword };
+module.exports = forgetPassword;
